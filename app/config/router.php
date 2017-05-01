@@ -9,7 +9,8 @@ require VENDOR . "crouter" . DS . "crouter.php";
 (new CRouter("router.inc.php", false))
 ->group(HOME)
 	->get('/', function(){
-		iBDL\Core\App::run("Home", "Index");
+            $app = new iBDL\Core\App;
+            $app->run("Home", "Index");
 	})
 	->get('/:controller', function($controller){
 		echo $controller;
