@@ -10,7 +10,7 @@ require VENDOR . "crouter" . DS . "crouter.php";
 ->group(HOME)
 	->get('/', function(){
             $app = new iBDL\Core\App;
-            $app->run("Home", "Index");
+            $app->run("home", "index");
 	})
 	->get('/:controller', function($controller){
 		echo $controller;

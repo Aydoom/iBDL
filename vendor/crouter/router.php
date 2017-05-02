@@ -14,10 +14,12 @@ class Router {
     const COLON = ':';
     const SEPARATOR = '/';
     const LEAF = 'LEAF';
+	
     public function __construct($tree=array(), $events=array()){
         $this->_tree = $tree;
         $this->_events = $events;
     }
+	
     /* helper function to create the tree based on urls, handlers will stored to leaf. */
     protected function match_one_path(&$node, $tokens, $cb, $hook){
         $token = array_shift($tokens);
@@ -30,6 +32,7 @@ class Router {
             return $this->match_one_path($node[$real_token], $tokens, $cb, $hook);
         $node[self::LEAF] = array($cb, (array)($hook));
     }
+	
     /* helper function to find handler by $path. */
     protected function _resolve($node, $tokens, $params, $depth=0){
         $depth = ($depth == 0 && !$tokens[0]) ? 1 : $depth;
@@ -61,10 +64,12 @@ class Router {
         }
         return array(false, '', null);
     }
+	
     public function resolve($method, $path, $params){
         $tokens = explode(self::SEPARATOR, str_replace('.', self::SEPARATOR, $path));
         return $this->_resolve(array_key_exists($method, $this->_tree) ? $this->_tree[$method] : $this->_default_node, $tokens, $params);
     }
+	
     /* API to find handler and execute it by parameters. */
     public function execute($params=array(), $method=null, $path=null){
         $method = $method ? $method : $_SERVER['REQUEST_METHOD'];
@@ -97,6 +102,7 @@ class Router {
         /* execute the callback handler and pass the result into "after" hook handler.*/
         return $this->hook('after', call_user_func_array($cb, $args), $this);
     }
+	
     public function match($method, $path, $cb, $hook=null){
         foreach((array)($method) as $m){
             $m = strtoupper($m);
@@ -108,6 +114,7 @@ class Router {
         }
         return $this;
     }
+	
     /* register api based on request method. also register "error" and "hook" API. */
     public function __call($name, $args){
         if (in_array($name, array('get', 'post', 'put', 'patch', 'delete', 'trace', 'connect', 'options', 'head'))

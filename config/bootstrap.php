@@ -14,7 +14,7 @@ define("ROOT", __DIR__ . DS . ".." . DS);
 		define("MODELS", APP . "models" . DS);
 		define("VIEW", APP . "view" . DS);
 			define("LAYOUT", VIEW . "layout" . DS);
-		define("WEBROOT", APP . "webroot" . DS);
+		define("WEBROOT", HOME . DS . "app" . DS . "webroot" . DS);
 			define("CSS", WEBROOT . "css" . DS);
 			define("JS", WEBROOT . "js" . DS);
 			define("IMGES", WEBROOT . "images" . DS);

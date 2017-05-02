@@ -1,40 +1,35 @@
-yyh<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
-    <?= $this->Html->charset() ?>
+    <?//= $this->Html->charset() ?>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>
-        <?= $cakeDescription ?>:
         <?= $this->fetch('title') ?>
     </title>
-    <?= $this->Html->meta('icon') ?>
+    <?//= $this->Html->meta('icon') ?>
 
-    <?= $this->Html->css('base.css') ?>
-    <?= $this->Html->css('cake.css') ?>
+    <?= $this->Html->css('bootstrap.min.css') ?>
+    <?= $this->Html->css('main.css') ?>
 
-    <?= $this->fetch('meta') ?>
-    <?= $this->fetch('css') ?>
-    <?= $this->fetch('script') ?>
+    <?//= $this->fetch('meta') ?>
+    <?//= $this->fetch('css') ?>
+    <?//= $this->fetch('script') ?>
 </head>
 <body>
-    <nav class="top-bar expanded" data-topbar role="navigation">
-        <ul class="title-area large-3 medium-4 columns">
-            <li class="name">
-                <h1><a href=""><?= $this->fetch('title') ?></a></h1>
-            </li>
-        </ul>
-        <div class="top-bar-section">
-            <ul class="right">
-                <li><a target="_blank" href="http://book.cakephp.org/3.0/">Documentation</a></li>
-                <li><a target="_blank" href="http://api.cakephp.org/3.0/">API</a></li>
-            </ul>
-        </div>
-    </nav>
-    <?= $this->Flash->render() ?>
-    <div class="container clearfix">
-        <?= $this->fetch('content') ?>
-    </div>
-    <footer>
-    </footer>
+    <div class="container-fluid">
+		<div class="row h100">
+			<div class="col-lg-2 col-nav">
+				<ul class="nav nav-pills nav-stacked nav-grey">
+					<li role="presentation" class="active"><a href="#">Главная</a></li>
+					<li role="presentation"><?= $this->Html->link("Данные", "home/data");?></li>
+					<li role="presentation"><a href="#">Загрузка</a></li>
+					<li role="presentation"><a href="#">Настройки</a></li>
+					<li role="presentation"><a href="#">Пользователи</a></li>
+					<li role="presentation"><a href="#">Выход</a></li>
+				</ul>
+			</div>
+			<div class="col-lg-10">Рабочая область</div>
+		</div>
+	</div>
 </body>
 </html>
