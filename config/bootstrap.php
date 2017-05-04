@@ -23,3 +23,16 @@ define("ROOT", __DIR__ . DS . ".." . DS);
 require_once CONFIG . "autoloader.php";
 require_once CONFIG . "basic.php";
 
+// Include Doctrine 2
+// Create a simple "default" Doctrine ORM configuration for Annotations
+$config = new Doctrine\ORM\Configuration();
+
+$connectionParams = array(
+    'dbname' => 'mydb',
+    'user' => 'user',
+    'password' => 'secret',
+    'host' => 'localhost',
+    'driver' => 'pdo_mysql',
+);
+
+$conn = Doctrine\DBAL\DriverManager::getConnection($connectionParams, $config);

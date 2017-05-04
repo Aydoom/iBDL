@@ -21,10 +21,13 @@
 			<div class="col-lg-2 col-nav">
 				<ul class="nav nav-pills nav-stacked nav-grey">
 					<li role="presentation" class="active"><a href="#">Главная</a></li>
-					<li role="presentation"><?= $this->Html->link("Данные", "home/data");?></li>
-					<li role="presentation"><a href="#">Загрузка</a></li>
-					<li role="presentation"><a href="#">Настройки</a></li>
-					<li role="presentation"><a href="#">Пользователи</a></li>
+					<li role="presentation"><?= $this->Html->link("Сессии", "session/index");?></li>
+					<li role="presentation"><?= $this->Html->link("Отчеты", "report/index");?></li>
+					<li role="presentation"><?= $this->Html->link("Группировки", "group/index");?></li>
+					<li role="presentation"><?= $this->Html->link("Генерации", "generation/index");?></li>
+					<li role="presentation"><?= $this->Html->link("Датчики", "sensor/index");?></li>
+					<li role="presentation"><?= $this->Html->link("Настройки", "setting/index");?></li>
+					<li role="presentation"><?= $this->Html->link("Пользователи", "user/index");?></li>
 					<li role="presentation"><a href="#">Выход</a></li>
 				</ul>
 			</div>
