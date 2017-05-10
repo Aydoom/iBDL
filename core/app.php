@@ -10,51 +10,55 @@ class App {
 
 
     /* Helpers */
-    public $Html;
+    public $html;
 
     
-
+    /**
+     * Constructor
+     */
     public function __construct()
     {
-        $this->Html = new \iBDL\Plugins\Helpers\HtmlHelper();
+        $this->html = new \iBDL\Plugins\Helpers\HtmlHelper();
     }
 	
-	
-	// Function get data from controller saves
-	public function fetch($name) {
-		
-		return $this->controller->_get($name);
-		
-	}
+    /**
+     * Function get data from controller saves
+     * 
+     * @param type $name
+     * @return type
+     */
+    public function fetch($name) 
+    {
+        return $this->controller->_get($name);
+    }
 
     
-    
-    public function run($controller, $action, $param = null) {
-
+    /**
+     * function run controller
+     * 
+     * @param type $controller
+     * @param type $action
+     * @param type $param
+     */
+    public function run($controller, $action, $param = null)
+    {
         $className = 'iBDL\App\Controller\\' . $controller;
-		
         $this->controller = new $className($action);
-
         $this->controller->$action($param);
 
         require LAYOUT . $this->controller->layout . ".php";
-
     }
 	
-	
-	
-	public function view() {
-	
-		$fileName = $this->controller->view;
-		
-		if (file_exists($fileName)) {
-		
-		
-		} else {
-		
-			pr("Нет вьювера: " . $this->controller->name . "/" . $this->controller->action . ".php - отсутсвует!");
-		
-		}
-	
-	}
+    /**
+     * function view()
+     */
+    public function view()
+    {
+        $fileName = $this->controller->view;
+        if (file_exists($fileName)) {
+        } else {
+            pr("Нет вьювера: " . $this->controller->name . "/"
+                    . $this->controller->action . ".php - отсутсвует!");
+        }
+    }
 }
