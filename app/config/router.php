@@ -2,10 +2,10 @@
 
 use iBDL\Core;
 
-require VENDOR . "crouter" . DS . "crouter.php";
+//require VENDOR . "crouter" . DS . "crouter.php";
 
 
-
+/*
 (new CRouter("router.inc.php", false))
 ->group(HOME)
 	->get('/', function(){
@@ -22,3 +22,25 @@ require VENDOR . "crouter" . DS . "crouter.php";
 		echo $controller . "+" . $action . "+" . $id;
 	})
 ->execute();
+*/
+
+$router = new iBDL\Core\Router();
+
+$router
+    ->get('/', function() {
+        $app = new iBDL\Core\App();
+        $app->run("home", "index");
+    })
+	->get('/:controller', function($controller){
+        $app = new iBDL\Core\App();
+        $app->run($controller, "index");
+	})
+	->get('/:controller/:action', function($controller, $action){
+        $app = new iBDL\Core\App();
+        $app->run($controller, $action);
+	})
+	->get('/:controller/:action/:id', function($controller, $action, $id){
+        $app = new iBDL\Core\App();
+        $app->run($controller, $action, ['id' => $id]);
+	})
+;

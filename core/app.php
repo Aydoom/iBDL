@@ -7,6 +7,7 @@ class App {
     public $controller;
     public $action;
     public $param;
+    public $view;
 
 
     /* Helpers */
