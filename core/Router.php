@@ -2,9 +2,14 @@
 
 namespace iBDL\Core;
 
+/**
+ * Description of Router
+ *
+ * @author Aydoom
+ */
 class Router
 {
-    public $request;
+    static public $request;
     public $method;
     
     public $baseDir = "/";
@@ -15,16 +20,21 @@ class Router
     
     static public $exit = false;
     
+    /**
+     * Constructor
+     */
     public function __construct() {
-        $requestUri = $_SERVER['REQUEST_URI'];
+        $requestUri = filter_input(INPUT_SERVER, 'REQUEST_URI', 
+                            FILTER_SANITIZE_SPECIAL_CHARS);
         $requestDir = $this->getRootDir();
         $lenRequest = strpos($requestUri, $requestDir)
                         - strlen($requestDir) + strlen($requestUri);
-        $this->request = substr($requestUri, -$lenRequest);                
+        self::$request = substr($requestUri, -$lenRequest);                
        
-        $this->method = strtolower($_SERVER['REQUEST_METHOD']);
+        $this->method = strtolower(filter_input(INPUT_SERVER, 'REQUEST_METHOD', 
+                            FILTER_SANITIZE_SPECIAL_CHARS));
         
-        $this->paths = array_slice(explode("/", $this->request), 1);
+        $this->paths = array_slice(explode("/", self::$request), 1);
     }
     
     public function access($action) {
@@ -33,26 +43,60 @@ class Router
         return $this;
     }
     
-    
     /**
-     * Function group()
-     *
-    */
-    public function group($baseDir) {
-        $this->baseDir = $baseDir;    
+     * 
+     * @param type $route
+     * @param type $action
+     * @return $this
+     */
+    public function ajax($route, $action) {
+        if ($this->method === 'ajax') {
+            $this->run($route, $action);
+        }
+        
+        return $this;
     }
     
     /**
-     * Function get()
      *
     */
-    public function get($route, $action) {
-        if (self::$exit || !$this->access) {
+    public function compareRoute($route) {
+        $paths = array_slice(explode("/", $route), 1);
+        
+        if (count($paths) !== count($this->paths)) {
             return false;
-        } elseif (is_callable($action) && $this->compareRoute($route)) {
-            //pr($this->args, false);
-            call_user_func_array($action, $this->args);
-            self::$exit = true;
+        }
+        
+        foreach ($paths as $key => $path) {
+            if (substr_count($path, ":") === 1) {
+                $this->args[] = $this->paths[$key];
+            } elseif ($path != $this->paths[$key]) {
+                return false;
+            }
+        }
+        
+        return true;
+    }
+    
+    /**
+     * 
+     * @param type $baseDir
+     */
+    public function group($baseDir) {
+        $this->baseDir = $baseDir;
+        
+        return $this;
+    }
+    
+    /**
+     * 
+     * @param type $route
+     * @param type $action
+     * @return $this
+     */
+    public function get($route, $action) {
+        if ($this->method === 'get') {
+            $this->run($route, $action);
         }
         
         return $this;
@@ -63,31 +107,55 @@ class Router
      *
     */
     public function getRootDir() {
+        $scriptName = filter_input(INPUT_SERVER, 'SCRIPT_NAME', 
+                                    FILTER_SANITIZE_SPECIAL_CHARS);
         
-        return implode("/", 
-            array_slice(explode("/", $_SERVER['SCRIPT_NAME']), 0, -1));
+        return implode("/", array_slice(explode("/", $scriptName), 0, -1));
+    }
+    
+   
+    /**
+     * 
+     * @param type $route
+     * @param type $action
+     * @return $this
+     */
+    public function post($route, $action) {
+        if ($this->method === 'post') {
+            $this->run($route, $action);
+        }
+        
+        return $this;
     }
     
     /**
-     *
-    */
-    public function compareRoute($route) {
-        //pr($route, false);
-        $paths = array_slice(explode("/", $route), 1);
-        
-        if (count($paths) !== count($this->paths)) {
-            //pr("\t out for count: " . count($paths) . "/" . count($this->paths), false);
-            return false;
-        } else {       
-            foreach ($paths as $key => $path) {
-                if (substr_count($path, ":") === 1) {
-                    $this->args[] = $this->paths[$key];
-                } elseif ($path != $this->paths[$key]) {
-                    return false;
-                }
-            }
+     * 
+     * @param type $route
+     * @param type $action
+     * @return $this
+     */
+    public function put($route, $action) {
+        if ($this->method === 'put') {
+            $this->run($route, $action);
         }
         
-        return true;
+        return $this;
+    }    
+    
+    /**
+     * 
+     * @param type $route
+     * @param type $action
+     * @return $this
+     */
+    public function run($route, $action) {
+        if (self::$exit || !$this->access) {
+            return $this;
+        } elseif (is_callable($action) && $this->compareRoute($route)) {
+            call_user_func_array($action, $this->args);
+            self::$exit = true;
+        }
+        
+        return $this;
     }
 }

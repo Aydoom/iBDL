@@ -17,51 +17,42 @@ namespace iBDL\Plugins\Helpers;
  
 class HtmlHelper {
     
-	
-	public function css($files) {
-		
-		if (!is_array($files)) {
-		
-			$files = [$files];
-		
-		}
-		
-		$output = "";
-		
-		foreach($files as $file) {
-		
-			$output.= '<link rel="stylesheet" media="screen" href="' . CSS . $file . '">' . "\n";
-		
-		}
-		
-		return $output;
-		
-	}
-	
-	
-	
-	public function link($text, $url, $params = []) {
-	
-		$class = '';
-		
-		if (isset($params['actUrl']) && $params['actUrl'] == $url) {
-			
-			$class.= ' active';
-			
-		}
-		
-		if (empty($class)) {
-			
-			$class = '';
-			
-		} else {
-			
-			$class = ' class="' . $class . '" ';
-			
-		}
-		
-		return '<a href="' . HOME . $url . '"' . $class . '>' . $text . '</a>'; 
-	
-	}
+    /**
+     * 
+     * @param type $files
+     * @return string
+     */
+    public function css($files) {
+        if (!is_array($files)) {
+            $files = [$files];
+        }
+
+        $output = "";
+        foreach($files as $file) {
+            $output.= '<link rel="stylesheet" media="screen" href="'
+                    . CSS . $file . '">' . "\n";
+        }
+
+        return $output;
+    }
+
+    /**
+     * 
+     * @param type $text
+     * @param type $url
+     * @param type $params
+     * @return type
+     */
+    public function link($text, $url, $params = []) {
+        $args = '';
+        
+        if (!empty($params)) {
+            foreach ($params as $arg => $val) {
+                $args.= ' ' . $arg . '="' . $val . '"';
+            }
+        }
+
+        return '<a href="' . HOME . $url . '"' . $args . '>' . $text . '</a>'; 
+    }
 	
 }

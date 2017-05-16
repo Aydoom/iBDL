@@ -11,7 +11,7 @@ namespace iBDL\Core;
 /**
  * Description of DB
  *
- * @author Angel
+ * @author Aydoom
  */
 class DB extends PDO{
 

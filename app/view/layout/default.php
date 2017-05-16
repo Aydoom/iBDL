@@ -1,3 +1,19 @@
+<?php
+    $menuLinks = [
+        "/"             => "Главная",
+        "/session"      => "Сессии",
+        "/report"       => "Отчеты",
+        "/group"        => "Группировки",
+        "/generation"   => "Генерации",
+        "/sensor"       => "Датчики",
+        "/setting"      => "Настройки",
+        "/user"         => "Пользователи",
+        "/trash"        => "Корзина",
+        "/user/logout"  => "Выход"
+    ];
+
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -17,24 +33,30 @@
 </head>
 <body>
     <div class="container-fluid">
-		<div class="row h100">
-			<div class="col-lg-2 col-nav">
-				<ul class="nav nav-pills nav-stacked nav-grey">
-					<li role="presentation" class="active"><a href="#">Главная</a></li>
-					<li role="presentation"><?= $this->html->link("Сессии", "/session/index");?></li>
-					<li role="presentation"><?= $this->html->link("Отчеты", "/report/index");?></li>
-					<li role="presentation"><?= $this->html->link("Группировки", "/group/index");?></li>
-					<li role="presentation"><?= $this->html->link("Генерации", "/generation/index");?></li>
-					<li role="presentation"><?= $this->html->link("Датчики", "/sensor/index");?></li>
-					<li role="presentation"><?= $this->html->link("Настройки", "/setting/index");?></li>
-					<li role="presentation"><?= $this->html->link("Пользователи", "/user/index");?></li>
-					<li role="presentation"><a href="#">Выход</a></li>
-				</ul>
-			</div>
-			<div class="col-lg-10">Рабочая область
+        <div class="row h100">
+            <div class="col-lg-2 col-nav">
+                <ul class="nav nav-pills nav-stacked nav-grey">
+                    <?php
+                        foreach ($menuLinks as $href => $text) {
+                            $r = iBDL\Core\Router::$request;
+                            if ($href === $r || $href . "/index" === $r) {
+                                $class = ' class="active"';
+                                $contentTitle = $text;
+                            } else {
+                                $class = '';
+                            }
+                            
+                            echo '<li role="presentation"' . $class . '>' .
+                                $this->html->link($text, $href) . '</li>';
+                        }
+                    ?>
+                </ul>
+            </div>
+            <div class="col-lg-10">
+                <h3><?=$contentTitle?></h3>
                 <?=$this->view()?>
             </div>
-		</div>
-	</div>
+        </div>
+    </div>
 </body>
 </html>

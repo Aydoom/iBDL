@@ -9,3 +9,5 @@ if ($_SERVER['SERVER_NAME'] === "localhost") {
 require_once "config/bootstrap.php";
 
 require APP . "index.php";
+
+require VENDOR . "php-mysql-migration/index.php";
