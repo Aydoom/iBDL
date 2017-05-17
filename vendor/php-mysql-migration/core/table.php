@@ -10,7 +10,18 @@ class Table {
     
     public $name = "table";
     public $fields = [];
-    
+ 
+    /**
+     * 
+     * @param type $name
+     */
+    public function __construct($name = false)
+    {
+        if ($name) {
+            $this->name = $name;
+        }
+    }
+ 
     /**
      * 
      * @param type $name
@@ -21,6 +32,9 @@ class Table {
         switch(strtolower($type)):
             case "datetime": 
                 $field = new Fields\DateTimeField($name);
+                break;
+            case "tinyint": 
+                $field = new Fields\TinyIntField($name);
                 break;
             default:
                 $className = 'PMMigration\\Core\\Fields\\'

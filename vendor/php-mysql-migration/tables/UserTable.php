@@ -13,9 +13,7 @@ class UserTable extends \PMMigration\Core\Table {
      */
     public function __construct($name = false)
     {
-        if ($name) {
-            $this->name = $name;
-        }
+        parent::__construct($name);
         
         $this->defId("id");
         $this->defId("id_user_group", false);

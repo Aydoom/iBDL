@@ -8,6 +8,11 @@ if ($_SERVER['SERVER_NAME'] === "localhost") {
 
 require_once "config/bootstrap.php";
 
-require APP . "index.php";
-
+// create tables into mysql
 require VENDOR . "php-mysql-migration/index.php";
+
+// run Auth
+require_once APP . "config/auth.php";
+
+// run APP
+require APP . "index.php";

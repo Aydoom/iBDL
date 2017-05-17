@@ -54,6 +54,7 @@
             </div>
             <div class="col-lg-10">
                 <h3><?=$contentTitle?></h3>
+                <hr/>
                 <?=$this->view()?>
             </div>
         </div>

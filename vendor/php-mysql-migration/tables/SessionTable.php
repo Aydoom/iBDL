@@ -13,7 +13,7 @@ namespace PMMigration\Tables;
  *
  * @author Aydoom
  */
-class SessionTable {
+class SessionTable extends \PMMigration\Core\Table {
 	
     public $name = 'session';
     public $fields = [];
@@ -24,13 +24,11 @@ class SessionTable {
      */
     public function __construct($name = false)
     {
-        if ($name) {
-            $this->name = $name;
-        }
+        parent::__construct($name);
         
         $this->defId("id");
-        $this->defId("id_user");
-        $this->defVarchars(["name"])->def("NOT NULL");
+        $this->defId("id_user", false);
+        $this->defVarchars(["name"]);
         $this->addField("trash", "tinyint")->def("NULL");
         $this->defDates(["registerDate", "trashDate"]);
     }

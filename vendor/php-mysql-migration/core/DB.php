@@ -54,6 +54,8 @@ class DB extends \PDO {
     {
         if($this->query($table->getQuery())) {
             echo "Table: <b>\"{$table->name}\"</b> is successful created.";
+        } else {
+            pr("error sql:" . $table->getQuery());
         }
     }
     
