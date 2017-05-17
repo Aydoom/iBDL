@@ -37,8 +37,12 @@ class Router
         $this->paths = array_slice(explode("/", self::$request), 1);
     }
     
-    public function access($action) {
-        $this->access = call_user_func($action);
+    public function access($action, $ok = true) {
+        if($ok) {
+            $this->access = call_user_func($action);
+        } else {
+            $this->access = !call_user_func($action);
+        }
         
         return $this;
     }
@@ -151,7 +155,8 @@ class Router
     public function run($route, $action) {
         if (self::$exit || !$this->access) {
             return $this;
-        } elseif (is_callable($action) && $this->compareRoute($route)) {
+        } elseif (is_callable($action) && 
+                ($route === '*' || $this->compareRoute($route))) {
             call_user_func_array($action, $this->args);
             self::$exit = true;
         }

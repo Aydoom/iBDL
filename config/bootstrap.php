@@ -23,12 +23,17 @@ define("ROOT", realpath(__DIR__ . DS . "..") . DS);
 require_once CONFIG . "autoloader.php";
 require_once CONFIG . "basic.php";
 
+
 // Include DB
 function config() {
-    return array(
-        'dbname' => 'ibdl',
-        'user' => 'root',
-        'password' => '',
-        'host' => 'localhost'
-    );
+    if ($_SERVER['HTTP_HOST'] === 'localhost') {
+        return array(
+            'host' 	=> 'localhost',
+            'dbname' 	=> 'ibdl',
+            'user'	=> 'root',
+            'password'	=> '',
+            'port'	=> 3306,
+            'driver'	=> 'mysql'
+        );
+    }
 }

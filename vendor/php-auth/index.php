@@ -6,4 +6,5 @@ require_once "config.php";
 require_once "autoload.php";
 require_once "functions.php";
 
-DB::connect($config);
+PAuth\Core\Session::start();
+PAuth\Core\DB::connect($config);
