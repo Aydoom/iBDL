@@ -2,11 +2,18 @@ html, body, .container-fluid, .h100 {
 	height: 100%;
 }
 
-.col-nav {
+.col-leftbar {
 	height: 100%;
 	background-color: #99a3b5;
-	padding-top: 10rem;
-	padding-right: 0;
+	padding-top: 2rem;
+    color: #fff;
+}
+.col-leftbar h4 {
+    
+}
+
+.col-nav {
+    padding-top: 10rem;
 }
 
 .nav-grey li>a {

@@ -6,8 +6,9 @@ use iBDL\Core\Controller;
 
 class User extends Controller {
 	
-	public function index() {
-		
+	public function login() {
+        $this->layout = 'user';
+		$this->_set('title', 'Log In');
 	}
 	
 	
