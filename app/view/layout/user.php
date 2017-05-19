@@ -17,7 +17,7 @@
             <div class="col-lg-2 col-leftbar">
                 <div class="col-nav-help text-center">
                     <h4>The form of autorization.</h4>
-                    <p>Please fill it to enter in this service.</p>                    
+                    <p>Please fill the form to enter in this service.</p>                    
                 </div>
             </div>
             <div class="col-lg-10">

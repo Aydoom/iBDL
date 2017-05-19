@@ -7,7 +7,7 @@ $router = new iBDL\Core\Router();
 use iBDL\Core\App as App;
 
 $router->access(['PAuth\Core\Auth', 'isLogin'], false)
-            ->get("/user/:action", function($action) {
+            ->any("/user/:action", function($action) {
                 $app = new App();
                 $app->run("user", $action);
             })

@@ -10,9 +10,11 @@ namespace iBDL\Core;
 class Router
 {
     static public $request;
-    public $method;
+    static public $method;
     
     public $baseDir = "/";
+    static public $rootDir = "/";
+    
     public $paths = [];
     public $args = [];
     
@@ -31,9 +33,7 @@ class Router
                         - strlen($requestDir) + strlen($requestUri);
         self::$request = substr($requestUri, -$lenRequest);                
        
-        $this->method = strtolower(filter_input(INPUT_SERVER, 'REQUEST_METHOD', 
-                            FILTER_SANITIZE_SPECIAL_CHARS));
-        
+        $this->setMethod();
         $this->paths = array_slice(explode("/", self::$request), 1);
     }
     
@@ -43,6 +43,18 @@ class Router
         } else {
             $this->access = !call_user_func($action);
         }
+        
+        return $this;
+    }
+    
+    /**
+     * 
+     * @param type $route
+     * @param type $action
+     * @return $this
+     */
+    public function any($route, $action) {
+        $this->run($route, $action);
         
         return $this;
     }
@@ -116,8 +128,9 @@ class Router
     public function getRootDir() {
         $scriptName = filter_input(INPUT_SERVER, 'SCRIPT_NAME', 
                                     FILTER_SANITIZE_SPECIAL_CHARS);
+        self::$rootDir = implode("/", array_slice(explode("/", $scriptName), 0, -1));
         
-        return implode("/", array_slice(explode("/", $scriptName), 0, -1));
+        return self::$rootDir;
     }
     
    
@@ -165,5 +178,17 @@ class Router
         }
         
         return $this;
+    }
+    
+    public function setMethod() {
+        $method = strtolower(filter_input(INPUT_SERVER, 'REQUEST_METHOD', 
+                            FILTER_SANITIZE_SPECIAL_CHARS));
+        if ($method === 'post') {
+            $postType = strtolower(filter_input(INPUT_POST, 'method', 
+                            FILTER_SANITIZE_SPECIAL_CHARS));
+            self::$method = (empty($postType)) ? $method : $postType;
+        } else {
+            self::$method = $method;
+        }
     }
 }

@@ -9,7 +9,6 @@ class App {
     public $param;
     public $view;
 
-
     /* Helpers */
     public $html;
     public $form;

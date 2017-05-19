@@ -34,13 +34,13 @@ class FormHelper extends HtmlHelper {
             'id'    => $this->name . 'Form',
             'name'  => $this->name,
             'action'=> $this->action,
-            'method'=> $this->method
+            'method'=> 'post'
         ];
         
         if ($this->method === 'post') {
             $hiddenMethod = null;
         } else {
-            $hiddenMethod = $this->hiddenInput('method', '_put');
+            $hiddenMethod = $this->hiddenInput('method', 'put');
         }
         
         $this->post = filter_input(INPUT_POST, $formArgs['id'], FILTER_DEFAULT,
@@ -53,7 +53,7 @@ class FormHelper extends HtmlHelper {
      *
      */
     public function hiddenInput($name, $value, $args = []) {
-        $defArgs = ['type' => 'hidden', 'name' => $name];
+        $defArgs = ['type' => 'hidden', 'name' => $name, 'value' => $value];
         
         return $this->tag('input', array_merge($defArgs, $args), TAG_CLOSED);
     }
@@ -62,7 +62,8 @@ class FormHelper extends HtmlHelper {
      *
      */
     public function setAction($action = false) {
-        $this->action = ($action) ? $action : Router::$request;
+        $this->action = ($action) ? Router::$rootDir . $action : 
+            Router::$rootDir . Router::$request;
     }
     
     /**
@@ -76,7 +77,7 @@ class FormHelper extends HtmlHelper {
      *
      */
     public function setMethod($name) {
-        $this->method = (empty($_POST[$name])) ? "post" : "put";
+        $this->method = (empty($_POST[$name])) ? "put" : "post";
     }
     
     /**
@@ -127,6 +128,17 @@ class FormHelper extends HtmlHelper {
         return $this->div("form-group", $content);
     }
     
+    /**
+     * 
+     * @param type $name
+     * @param type $attrs
+     * @return type
+     */
+    public function number($name, $attrs = []) {
+        $content = $this->input($name, array_merge($attrs, ['type' => 'number']));
+        
+        return $this->div("form-group", $content);
+    }
     /**
      *
      */
