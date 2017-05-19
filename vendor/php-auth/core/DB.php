@@ -33,4 +33,13 @@ class DB extends \PDO {
                 $user, $psw, $group);
         return (self::$db->query($query));
     }
-}      
+    
+    static public function getUserByToken($user, $token) {
+        $query = sql_placeholder('SELECT * FROM `user` LEFT JOIN `user_group`'
+                            . ' ON user.id_user_group = id.user_group'
+                            . ' WHERE user.id = ' . strval($user)
+                            . ' AND user.token = ' . strval($token));
+
+        return (self::$db->query($query));
+    }
+}

@@ -11,8 +11,8 @@ require_once "config/bootstrap.php";
 // create tables into mysql
 require VENDOR . "php-mysql-migration/index.php";
 
-// run Auth
-require_once APP . "config/auth.php";
+// connect Auth
+require VENDOR . "php-auth/index.php";
 
 // run APP
 require APP . "index.php";

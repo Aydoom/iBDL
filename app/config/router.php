@@ -6,10 +6,14 @@ use PAuth\Core\Auth as Auth;
 $router = new iBDL\Core\Router();
 use iBDL\Core\App as App;
 
-$router->access(['iBDL\Core\App', 'enter'], false)
+$router->access(['PAuth\Core\Auth', 'isLogin'], false)
+            ->get("/user/:action", function($action) {
+                $app = new App();
+                $app->run("user", $action);
+            })
             ->get('*', function() {
                 $app = new App();
-                $app->run("user", "login");
+                $app->redirect("user/login");
         });
 
 $router

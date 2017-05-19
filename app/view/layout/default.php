@@ -34,7 +34,7 @@
 <body>
     <div class="container-fluid">
         <div class="row h100">
-            <div class="col-lg-2 col-nav">
+            <div class="col-lg-2 col-leftbar">
                 <ul class="nav nav-pills nav-stacked nav-grey">
                     <?php
                         foreach ($menuLinks as $href => $text) {

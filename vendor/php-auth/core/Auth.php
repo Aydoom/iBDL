@@ -1,33 +1,46 @@
 <?php 
-
 namespace PAuth\Core;
+
+use iBDL\Core\Router as Router;
 
 class Auth {
     
     static public $user;
     
     /**
+     *
+     */
+    static public function falseLogin() {
+        Session::set('falseUri', Router::$request);
+                            
+        return false;
+    }
+    
+    /**
      * 
      * @return boolean
      */
-    static public function enter() {
+    static public function isLogin() {
         $userID = Cookie::getUserID();
-        $token = Cookie::getToken();
+        $token = Cookie::getUserToken();
         
         if (!empty($userID) && !empty($token)) {
             self::$user = DB::getUserByToken($userID, $token);
         } else {
-            return false;
+            return self::falseLogin();
         }
         
         if (empty(self::$user)) {
-            return false;
+            return self::falseLogin();
         } else {
             Cookie::updateTime();
             return true;
         }
     }
 
+    /**
+     *
+     */
     static public function login($userName, $password) {
         $user = DB::getUserByPsw($userName, $password);
     }

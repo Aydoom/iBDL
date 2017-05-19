@@ -73,12 +73,15 @@ class Router
         
         foreach ($paths as $key => $path) {
             if (substr_count($path, ":") === 1) {
-                $this->args[] = $this->paths[$key];
+                $name = ltrim($path, ":");
+                $this->args[$name] = $this->paths[$key];
             } elseif ($path != $this->paths[$key]) {
                 return false;
+            } else {
+                //$this->args[] = $this->paths[$key];
             }
         }
-        
+        //pr($this->args);
         return true;
     }
     

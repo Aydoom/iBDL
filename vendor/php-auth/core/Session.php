@@ -22,4 +22,8 @@ class Session {
         
         self::$fields = $_SESSION;
     }
+    
+    static public function set($name, $value) {
+        $_SESSION[$name] = $value;
+    }
 }

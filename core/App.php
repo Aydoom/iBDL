@@ -12,6 +12,7 @@ class App {
 
     /* Helpers */
     public $html;
+    public $form;
 
     
     /**
@@ -20,6 +21,7 @@ class App {
     public function __construct()
     {
         $this->html = new \iBDL\Plugins\Helpers\HtmlHelper();
+        $this->form = new \iBDL\Plugins\Helpers\FormHelper();
     }
 	
     /**
@@ -51,12 +53,23 @@ class App {
     }
 	
     /**
+     * function redirect()
+     */
+    public function redirect($uri)
+    {
+        $location = 'http://' . $_SERVER['SERVER_NAME']
+            . $_SERVER['REQUEST_URI'] . $uri;
+        header('Location: ' . $location);
+    }
+	
+    /**
      * function view()
      */
     public function view()
     {
         $fileName = $this->controller->view;
         if (file_exists($fileName)) {
+            require $fileName;
         } else {
             pr("Нет вьювера: " . $this->controller->name . "/"
                     . $this->controller->action . ".php - отсутсвует!");
