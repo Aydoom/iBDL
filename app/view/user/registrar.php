@@ -11,5 +11,8 @@
            
             echo $this->form->end("SignUp");
         ?>
+        <div class="text-right">
+            <?=$this->html->link("I have a login", "/user/login");?>
+        </div>
     </div>
 </div>

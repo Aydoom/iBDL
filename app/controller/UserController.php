@@ -3,13 +3,13 @@
 namespace iBDL\App\Controller;
 
 use iBDL\Core\Controller;
-use iBDL\APP\Model\UserModel;
 
 class UserController extends Controller {
     
     public $layout = 'user';
     
     public function login() {
+        $this->loadModel('user');
         $this->_set('title', 'Log In');
     }
 	

@@ -33,8 +33,14 @@ class Model {
      * @param type $name
      * @return type
      */
-    public function getRequest($name) {
-        return Request::get(strtolower($this->modelName) . "." . $name);
+    public function getFieldName($name) {
+        return strtolower($this->modelName) . "." . $name;
+    }
+    
+    public function find($conditions = []) {
+        $db = new DB(config(), strtolower($this->modelName));
+        
+        return $db->find($conditions);
     }
     
     /**
@@ -42,18 +48,23 @@ class Model {
      * @return type
      */
     public function validation() {
-        $valid = new Validation();
+        $valid = new Validation($this);
         foreach($this->validRules as $field => $rules) {
+            $fieldName = $this->getFieldName($field);            
             if (!is_array($rules)) {
                 $rules = [$rules];
             }
             
+            if (!Request::has($fieldName)) {
+                continue;
+            }
+            
             foreach($rules as $rule) {
                 $ruleName = $rule['rule'];
-                $error = $valid->$ruleName($this->getRequest($field), $rule);
+                $error = $valid->$ruleName(Request::get($fieldName), $rule, $field);
                 if ($error !== null) {
                     $this->hasErrors = true;
-                    $this->validErrors[$field] = $error;                    
+                    $this->validErrors[$field][] = $error;                    
                 }
             }
         }

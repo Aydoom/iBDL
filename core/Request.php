@@ -22,7 +22,8 @@ class Request {
         $request = $_REQUEST;
         foreach($namePath as $path) {
             if (!is_array($request[$path])) {
-                self::$vars[$name] = htmlspecialchars(strip_tags($request[$path]));
+                self::$vars[$name] = htmlspecialchars(
+                        strip_tags(trim($request[$path])));
                 break;
             } else {
                 $request = $request[$path];
@@ -36,6 +37,22 @@ class Request {
         }
 
         return self::$vars[$name];
+    }
+    
+    static public function has($name) {
+        $namePath = explode(".", $name);
+        $request = $_REQUEST;
+        $has = true;
+        foreach($namePath as $path) {
+            if (!isset($request[$path])) {
+                $has = false;
+                break;
+            } else {
+                $request = $request[$path];
+            }
+        }
+        
+        return $has;
     }
     
     static public function set($name, $value) {

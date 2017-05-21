@@ -127,7 +127,8 @@ class FormHelper extends HtmlHelper {
         $id = 'Input' . ucfirst($attrs['type']) . ucfirst($name);
         
         if (!empty($this->activeModel->validErrors[$name])) {
-            $attrs['label'].= ' *' . $this->activeModel->validErrors[$name];
+            $attrs['label'].= $this->block("small",
+                    " *" . $this->activeModel->validErrors[$name][0]);
         }        
         
         if ($attrs['label'] === false) {

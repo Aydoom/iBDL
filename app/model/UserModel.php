@@ -19,9 +19,17 @@ class UserModel extends Model{
     
     public $validRules = [
         'name' => [
-            ['rule'      => 'text', 'message'   => 'the field must content the only letters'],
-            ['rule'      => 'required', 'message'   => 'login is not filled'],
-        ]
+            ['rule' => 'required', 'message' => 'login is not filled'],
+            ['rule' => 'text', 'message' => 'the field must content the only letters'],
+            ['rule' => 'lenght', 'min' => 3, 'max' => 15],
+            ['rule' => 'unique'],
+        ],
+        'name2' => [
+            ['rule' => 'required', 'message' => 'login is not filled'],
+            ['rule' => 'text', 'message' => 'the field must content the only letters'],
+            ['rule' => 'lenght', 'min' => 3, 'max' => 15],
+        ],
+        
     ];
     
 }
