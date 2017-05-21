@@ -4,7 +4,7 @@ namespace iBDL\App\Controller;
 
 use iBDL\Core\Controller;
 
-class Group extends Controller {
+class SettingController extends Controller {
 	
 	public function index() {
 		

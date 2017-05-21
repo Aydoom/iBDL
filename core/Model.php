@@ -17,14 +17,25 @@ class Model {
     
     public $validRules = [];
     public $validErrors = [];
+    public $hasErros = false;
     
     public $modelName;
-    public $data;
     
+    /**
+     * 
+     */
     public function __construct() {
         $this->modelName = substr(array_pop(explode("\\", get_class($this))), 0, -5);
-        $this->data = filter_input(INPUT_POST, $this->modelName, FILTER_DEFAULT,
-        FILTER_REQUIRE_ARRAY);
+    }
+    
+    /**
+     * 
+     * @param type $name
+     * @return type
+     */
+    public function getRequest($name) {
+        $name = special_chars()
+        return filter_input(INPUT_POST, $name, FILTER_DEFAULT, FILTER_);
     }
     
     /**
@@ -34,13 +45,20 @@ class Model {
     public function validation() {
         $valid = new Validation();
         foreach($this->validRules as $field => $rules) {
-            pr($this->data);
-            $rule = $rules['rule'];
-            $this->validErrors[$field] = 
-                    $valid->$rule($this->data[$field], $rules);
+            if (!is_array($rules)) {
+                $rules = [$rules];
+            }
+            
+            foreach($rules as $rule) {
+                $ruleName = $rule['rule'];
+                $error = $valid->$ruleName($this->getRequest($field), $rule);
+                if ($error !== null) {
+                    $this->hasErros = true;
+                    $this->validErrors[$field] = $error;                    
+                }
+            }
         }
-        pr($this->validRules);
-        return (!empty($this->validErrors));
+        return !$this->hasErros;
     }
     
 }

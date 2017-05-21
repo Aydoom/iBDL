@@ -4,7 +4,7 @@ namespace iBDL\App\Controller;
 
 use iBDL\Core\Controller;
 
-class Sensor extends Controller {
+class GroupController extends Controller {
 	
 	public function index() {
 		

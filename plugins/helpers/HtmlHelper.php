@@ -20,9 +20,12 @@ class HtmlHelper {
     const TAG_CLOSED = true;
     const TAG_OPENED = false;
     
-    
     /**
-     *
+     * 
+     * @param type $name
+     * @param type $content
+     * @param type $attrs
+     * @return type
      */
     public function block($name, $content = null, $attrs = []) {
         
@@ -30,18 +33,6 @@ class HtmlHelper {
         
         return '<' . $name . $this->getAttrString($attrs) . '>'
                     . $n . $content . $n . "</$name>\n";
-    }
-
-    /**
-     *
-    */
-    public function getAttrString($attrs) {
-        $attrStirng = "";
-        foreach($attrs as $name => $val) {
-            $attrStirng.= ' ' . $name . '="' . $val . '"'; 
-        }
-        
-        return $attrStirng;
     }
     
     /**
@@ -64,16 +55,46 @@ class HtmlHelper {
     }
     
     /**
-     *
+     * 
+     * @param type $class
+     * @param type $content
+     * @param type $attrs
+     * @return type
      */
     public function div($class, $content = null, $attrs = []) {
-        return '<div'
-            . $this->getAttrString(array_merge($attrs, ['class' => $class]))
-            . '>' . "\n" . $content . "\n" . "</div>";
+        $divAttrs = array_merge($attrs, ['class' => $class]);
+        
+        return $this->block("div", $content, $divAttrs);
     }
     
     /**
-     *
+     * 
+     * @param type $tagName
+     * @return type
+     */
+    public function endTag($tagName) {
+        return "</$tagName>";
+    }
+
+    /**
+     * 
+     * @param type $attrs
+     * @return string
+     */
+    public function getAttrString($attrs) {
+        $attrStirng = "";
+        foreach($attrs as $name => $val) {
+            $attrStirng.= ' ' . $name . '="' . $val . '"'; 
+        }
+        
+        return $attrStirng;
+    }
+    
+    /**
+     * 
+     * @param type $for
+     * @param type $text
+     * @return type
      */
     public function label($for, $text) {
         return $this->block("label", $text, ['for' => $for]);
@@ -83,36 +104,25 @@ class HtmlHelper {
      * 
      * @param type $text
      * @param type $url
-     * @param type $params
+     * @param type $attrs
      * @return type
      */
-    public function link($text, $url, $params = []) {
-        $attrs = '';
-        
-        if (!empty($params)) {
-            foreach ($params as $arg => $val) {
-                $attrs.= ' ' . $arg . '="' . $val . '"';
-            }
-        }
+    public function link($text, $url, $attrs = []) {
+        $linkAttrs = array_merge(['href' => HOME . $url], $attrs);
 
-        return '<a href="' . HOME . $url . '"' . $attrs . '>' . $text . '</a>'; 
+        return $this->block("a", $text, $linkAttrs); 
     }
     
     /**
-     *
-    */
-    public function tag($tagName, $attrs = [], $close = TAG_OPENED) {
-        $closeTag = ($close === TAG_CLOSED) ? ' /' : ' ';
+     * 
+     * @param type $tagName
+     * @param type $attrs
+     * @param type $close
+     * @return type
+     */
+    public function tag($tagName, $attrs = [], $close = TAG_CLOSED) {
+        $closeTag = ($close !== TAG_OPENED) ? ' /' : ' ';
         
         return '<' . $tagName . $this->getAttrString($attrs) . $closeTag . '>' . "\n";
     }
-    
-    /**
-     *
-     */
-    public function endTag($tagName) {
-        return "</$tagName>";
-    }
-    
-	
 }

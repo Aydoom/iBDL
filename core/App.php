@@ -44,7 +44,7 @@ class App {
      */
     public function run($controller, $action, $param = null)
     {
-        $className = 'iBDL\App\Controller\\' . $controller;
+        $className = 'iBDL\App\Controller\\' . ucfirst($controller) . "Controller";
         $this->controller = new $className($action);
         $this->controller->$action($param);
 

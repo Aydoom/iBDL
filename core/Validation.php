@@ -11,13 +11,16 @@ namespace iBDL\Core;
 /**
  * Description of Validation
  *
- * @author Angel
+ * @author Aydoom
  */
 class Validation {
     
+    public function required($data, $rule) {
+        return (empty($data)) ? $rule['message'] : null;
+    }
+    
     public function text($data, $rule) {
-        pr($data);
         preg_match("/[a-zA-Z,.\s]*/", $data, $matches);
-        pr($matches);
+        return ($data !== $matches[0]) ? $rule['message'] : null;
     }
 }

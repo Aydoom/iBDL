@@ -23,11 +23,13 @@ class FormHelper extends HtmlHelper {
     public $post = [];
     
     /**
-     *
+     * 
+     * @param type $name
+     * @param type $action
+     * @return type
      */
     public function create($name, $action = false) {
         $this->setName($name);
-        $this->setMethod($name);
         $this->setAction($action);
         
         $formArgs = [
@@ -37,29 +39,40 @@ class FormHelper extends HtmlHelper {
             'method'=> 'post'
         ];
         
+        $this->post = filter_input(INPUT_POST, $formArgs['id'], FILTER_DEFAULT,
+        FILTER_REQUIRE_ARRAY);        
+        
+        $this->setMethod($name);
+        
         if ($this->method === 'post') {
             $hiddenMethod = null;
         } else {
-            $hiddenMethod = $this->hiddenInput('method', 'put');
+            $hiddenMethod = $this->methodInput('put');
         }
-        
-        $this->post = filter_input(INPUT_POST, $formArgs['id'], FILTER_DEFAULT,
-        FILTER_REQUIRE_ARRAY);
         
         return $this->tag('form', $formArgs) . $hiddenMethod;
     }
     
     /**
-     *
+     * 
+     * @param type $name
+     * @param type $value
+     * @param type $args
+     * @return type
      */
     public function hiddenInput($name, $value, $args = []) {
-        $defArgs = ['type' => 'hidden', 'name' => $name, 'value' => $value];
+        $defArgs = [
+            'type' => 'hidden', 
+            'name' => "{$this->name}[$name]", 
+            'value' => $value
+        ];
         
         return $this->tag('input', array_merge($defArgs, $args), TAG_CLOSED);
     }
     
     /**
-     *
+     * 
+     * @param type $action
      */
     public function setAction($action = false) {
         $this->action = ($action) ? Router::$rootDir . $action : 
@@ -67,17 +80,19 @@ class FormHelper extends HtmlHelper {
     }
     
     /**
-     *
+     * 
+     * @param type $name
      */
     public function setName($name) {
         $this->name = $name;
     }
     
     /**
-     *
+     * 
+     * @param type $name
      */
     public function setMethod($name) {
-        $this->method = (empty($_POST[$name])) ? "put" : "post";
+        $this->method = (empty($this->post[$name])) ? "put" : "post";
     }
     
     /**
@@ -97,20 +112,23 @@ class FormHelper extends HtmlHelper {
         
         $inputAttrs = array_merge([
             'class' => 'form-control',
-            'name'  => $name,
+            'name'  => "{$this->name}[$name]",
             'id'    => $id
         ], $attrs);
         
         if (isset($this->post[$name])) {
             $inputAttrs['value'] = $this->post[$name];
-        };
+        }
         
         return $label . $this->tag('input', $inputAttrs);
     }
     
     
     /**
-     *
+     * 
+     * @param type $name
+     * @param type $attrs
+     * @return type
      */
     public function text($name, $attrs = []) {
         $content = $this->input($name, array_merge($attrs, ['type' => 'text']));
@@ -131,6 +149,23 @@ class FormHelper extends HtmlHelper {
     /**
      * 
      * @param type $name
+     * @param type $value
+     * @param type $args
+     * @return type
+     */
+    public function methodInput($method) {
+        $defArgs = [
+            'type' => 'hidden', 
+            'name' => "method", 
+            'value' => $method
+        ];
+        
+        return $this->tag('input', $defArgs, TAG_CLOSED);
+    }
+    
+    /**
+     * 
+     * @param type $name
      * @param type $attrs
      * @return type
      */
@@ -139,8 +174,11 @@ class FormHelper extends HtmlHelper {
         
         return $this->div("form-group", $content);
     }
+
     /**
-     *
+     * 
+     * @param type $name
+     * @return type
      */
     public function end($name) {
         $attrs = [

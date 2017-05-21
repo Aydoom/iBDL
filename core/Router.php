@@ -37,6 +37,12 @@ class Router
         $this->paths = array_slice(explode("/", self::$request), 1);
     }
     
+    /**
+     * 
+     * @param type $action
+     * @param type $ok
+     * @return $this
+     */
     public function access($action, $ok = true) {
         if($ok) {
             $this->access = call_user_func($action);
@@ -55,7 +61,7 @@ class Router
      */
     public function any($route, $action) {
         $this->run($route, $action);
-        
+
         return $this;
     }
     
@@ -66,7 +72,7 @@ class Router
      * @return $this
      */
     public function ajax($route, $action) {
-        if ($this->method === 'ajax') {
+        if (self::$method === 'ajax') {
             $this->run($route, $action);
         }
         
@@ -78,7 +84,7 @@ class Router
     */
     public function compareRoute($route) {
         $paths = array_slice(explode("/", $route), 1);
-        
+
         if (count($paths) !== count($this->paths)) {
             return false;
         }
@@ -114,10 +120,10 @@ class Router
      * @return $this
      */
     public function get($route, $action) {
-        if ($this->method === 'get') {
+        if (self::$method === 'get') {
             $this->run($route, $action);
         }
-        
+
         return $this;
     }
     
@@ -141,7 +147,7 @@ class Router
      * @return $this
      */
     public function post($route, $action) {
-        if ($this->method === 'post') {
+        if (self::$method === 'post') {
             $this->run($route, $action);
         }
         
@@ -155,7 +161,7 @@ class Router
      * @return $this
      */
     public function put($route, $action) {
-        if ($this->method === 'put') {
+        if (self::$method === 'put') {
             $this->run($route, $action);
         }
         

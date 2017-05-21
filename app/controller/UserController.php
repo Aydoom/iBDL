@@ -5,7 +5,7 @@ namespace iBDL\App\Controller;
 use iBDL\Core\Controller;
 use iBDL\APP\Model\UserModel;
 
-class User extends Controller {
+class UserController extends Controller {
     
     public $layout = 'user';
     
@@ -18,8 +18,7 @@ class User extends Controller {
         if($this->isPut() && $model->validation()) {
             pr('all ok');
         }
-        pr('stop');
-        
+        //pr(__METHOD__);
         $this->_set('title', 'Registration');
     }
 

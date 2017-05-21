@@ -17,23 +17,17 @@ class Controller {
 
     public function __construct($action) {
 
-        $this->name = $className = strtolower(array_pop(explode("\\", get_class($this))));
-
+        $this->name = substr(strtolower(array_pop(
+                                    explode("\\", get_class($this)))), 0 , -10);
         $this->action = $action;
-
-        $this->view = VIEW . $className . DS . $action . ".php";
-
+        $this->view = VIEW . $this->name . DS . $action . ".php";
     }
-
-
 
     public function _set($name, $value) {
 
         $this->data[$name] = $value;
 
     }
-
-
 
     public function _get($name) {
 

@@ -1,8 +1,5 @@
 <?php 
 
-use iBDL\Core;
-use PAuth\Core\Auth as Auth;
-
 $router = new iBDL\Core\Router();
 use iBDL\Core\App as App;
 

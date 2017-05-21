@@ -12,7 +12,7 @@ class Auth {
      */
     static public function falseLogin() {
         Session::set('falseUri', Router::$request);
-                            
+  
         return false;
     }
     
@@ -23,7 +23,7 @@ class Auth {
     static public function isLogin() {
         $userID = Cookie::getUserID();
         $token = Cookie::getUserToken();
-        
+
         if (!empty($userID) && !empty($token)) {
             self::$user = DB::getUserByToken($userID, $token);
         } else {

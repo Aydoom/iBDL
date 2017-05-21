@@ -4,7 +4,7 @@ namespace iBDL\App\Controller;
 
 use iBDL\Core\Controller;
 
-class Report extends Controller {
+class GenerationController extends Controller {
 	
 	public function index() {
 		
