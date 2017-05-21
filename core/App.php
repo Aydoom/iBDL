@@ -19,8 +19,6 @@ class App {
      */
     public function __construct()
     {
-        $this->html = new \iBDL\Plugins\Helpers\HtmlHelper();
-        $this->form = new \iBDL\Plugins\Helpers\FormHelper();
     }
 	
     /**
@@ -47,6 +45,9 @@ class App {
         $className = 'iBDL\App\Controller\\' . ucfirst($controller) . "Controller";
         $this->controller = new $className($action);
         $this->controller->$action($param);
+        
+        $this->html = new \iBDL\Plugins\Helpers\HtmlHelper();
+        $this->form = new \iBDL\Plugins\Helpers\FormHelper($this->controller->models);
 
         require LAYOUT . $this->controller->layout . ".php";
     }

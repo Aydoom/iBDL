@@ -7,6 +7,7 @@ class Controller {
     public $layout = "default";
 
     public $data = [];
+    public $models = [];
 
     public $view;
 
@@ -45,5 +46,11 @@ class Controller {
         $method = filter_input(INPUT_POST, 'method', FILTER_DEFAULT);
         return (strtolower($method) === "put");
     }
-
+    
+    public function &loadModel($modelName) {
+        $className = 'iBDL\\App\\Model\\' . ucfirst($modelName) . "Model";
+        $this->models[$modelName] = new $className();
+        
+        return $this->models[$modelName];
+    }
 }

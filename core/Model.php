@@ -7,7 +7,7 @@
  */
 
 namespace iBDL\Core;
-
+use \iBDL\Core\Request;
 /**
  * Description of Model
  *
@@ -17,7 +17,7 @@ class Model {
     
     public $validRules = [];
     public $validErrors = [];
-    public $hasErros = false;
+    public $hasErrors = false;
     
     public $modelName;
     
@@ -34,8 +34,7 @@ class Model {
      * @return type
      */
     public function getRequest($name) {
-        $name = special_chars()
-        return filter_input(INPUT_POST, $name, FILTER_DEFAULT, FILTER_);
+        return Request::get(strtolower($this->modelName) . "." . $name);
     }
     
     /**
@@ -53,12 +52,12 @@ class Model {
                 $ruleName = $rule['rule'];
                 $error = $valid->$ruleName($this->getRequest($field), $rule);
                 if ($error !== null) {
-                    $this->hasErros = true;
+                    $this->hasErrors = true;
                     $this->validErrors[$field] = $error;                    
                 }
             }
         }
-        return !$this->hasErros;
+        return !$this->hasErrors;
     }
     
 }

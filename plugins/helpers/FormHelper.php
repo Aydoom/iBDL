@@ -13,7 +13,8 @@
  */
  
 namespace iBDL\Plugins\Helpers;
-use iBDL\Core\Router as Router; 
+use iBDL\Core\Router;
+use \iBDL\Core\Request;
  
 class FormHelper extends HtmlHelper {
     
@@ -22,6 +23,22 @@ class FormHelper extends HtmlHelper {
     public $action; 
     public $post = [];
     
+    public $activeModels = [];
+    public $activeModel;
+    
+    public function __construct($models) {
+        $this->activeModels = array_change_key_case($models, CASE_LOWER);
+    }
+    
+    public function div($name, $content) {
+        $class = "form-group";
+        if (!empty($this->activeModel->validErrors[$name])) {
+            $class.= ' has-error';
+        }
+        
+        return parent::div($class, $content);
+    }
+    
     /**
      * 
      * @param type $name
@@ -29,7 +46,14 @@ class FormHelper extends HtmlHelper {
      * @return type
      */
     public function create($name, $action = false) {
-        $this->setName($name);
+        $this->setName(strtolower($name));
+        
+        if (!array_key_exists($this->name, $this->activeModels)) {
+            pr("Error from FormHelper \n the model name \"$name\" not found in controller!");
+        } else {
+            $this->activeModel = $this->activeModels[$this->name];
+        }
+        
         $this->setAction($action);
         
         $formArgs = [
@@ -102,6 +126,10 @@ class FormHelper extends HtmlHelper {
         
         $id = 'Input' . ucfirst($attrs['type']) . ucfirst($name);
         
+        if (!empty($this->activeModel->validErrors[$name])) {
+            $attrs['label'].= ' *' . $this->activeModel->validErrors[$name];
+        }        
+        
         if ($attrs['label'] === false) {
             $label = null;
         } elseif (!empty($attrs['label'])) {
@@ -113,6 +141,7 @@ class FormHelper extends HtmlHelper {
         $inputAttrs = array_merge([
             'class' => 'form-control',
             'name'  => "{$this->name}[$name]",
+            'value' => Request::get($this->name . "." . $name),
             'id'    => $id
         ], $attrs);
         
@@ -133,7 +162,7 @@ class FormHelper extends HtmlHelper {
     public function text($name, $attrs = []) {
         $content = $this->input($name, array_merge($attrs, ['type' => 'text']));
         
-        return $this->div("form-group", $content);
+        return $this->div($name, $content);
     }
     
     
@@ -143,7 +172,7 @@ class FormHelper extends HtmlHelper {
     public function password($name, $attrs = []) {
         $content = $this->input($name, array_merge($attrs, ['type' => 'password']));
         
-        return $this->div("form-group", $content);
+        return $this->div($name, $content);
     }
     
     /**
@@ -172,7 +201,7 @@ class FormHelper extends HtmlHelper {
     public function number($name, $attrs = []) {
         $content = $this->input($name, array_merge($attrs, ['type' => 'number']));
         
-        return $this->div("form-group", $content);
+        return $this->div($name, $content);
     }
 
     /**

@@ -14,8 +14,8 @@ class UserController extends Controller {
     }
 	
     public function registrar() {
-        $model = new UserModel();
-        if($this->isPut() && $model->validation()) {
+        $user = $this->loadModel('user');
+        if($this->isPut() && $user->validation()) {
             pr('all ok');
         }
         //pr(__METHOD__);
