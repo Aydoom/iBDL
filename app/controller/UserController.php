@@ -17,6 +17,7 @@ class UserController extends Controller {
         $user = $this->loadModel('user');
         if($this->isPut() && $user->validation()) {
             pr('all ok');
+            $user->save();
         }
         //pr(__METHOD__);
         $this->_set('title', 'Registration');

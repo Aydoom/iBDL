@@ -32,13 +32,16 @@ class DB extends \PDO{
     public function find($conditions = []) {
         $fields = (!empty($conditions['fields'])) ? 
                 implode(", ", $conditions['fields']) : "*";
+                
+        $result = $this->query('SELECT ' . $fields . ' FROM ' . $this->table . 
+                ' ' . $this->getCondition($conditions));
         
-        $query = 'SELECT ' . $fields . ' FROM ' . $this->table . 
-                ' ' . $this->getCondition($conditions);
-        
-        pr($query);
-        
-        return $this->query($query);
+        $output = [];
+        foreach ($result as $row) {
+            $output[] = $row;
+        }
+
+        return $output;
     }
     
     public function getCondition($cond) {

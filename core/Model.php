@@ -34,13 +34,21 @@ class Model {
      * @return type
      */
     public function getFieldName($name) {
-        return strtolower($this->modelName) . "." . $name;
+        return strtolower($this->modelName) . "Form." . $name;
     }
     
     public function find($conditions = []) {
         $db = new DB(config(), strtolower($this->modelName));
         
         return $db->find($conditions);
+    }
+    
+    public function save() {
+        $db = new DB(config(), strtolower($this->modelName));
+        
+        pr(Request::get('user'));
+        
+        return $db->insert($data);
     }
     
     /**
@@ -68,6 +76,7 @@ class Model {
                 }
             }
         }
+        
         return !$this->hasErrors;
     }
     

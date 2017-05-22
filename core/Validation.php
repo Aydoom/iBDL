@@ -48,8 +48,9 @@ class Validation {
         $message = ($rule['message']) ? $rule['message'] :
             'it must be unique';
         $result = $this->model->find([
-            'where' => "$field=$data",
+            'where' => "$field=\"$data\"",
             'limit' => 1]);
+            
         return (empty($result)) ? null : $message;
     }
 }

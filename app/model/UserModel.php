@@ -24,12 +24,6 @@ class UserModel extends Model{
             ['rule' => 'lenght', 'min' => 3, 'max' => 15],
             ['rule' => 'unique'],
         ],
-        'name2' => [
-            ['rule' => 'required', 'message' => 'login is not filled'],
-            ['rule' => 'text', 'message' => 'the field must content the only letters'],
-            ['rule' => 'lenght', 'min' => 3, 'max' => 15],
-        ],
-        
     ];
     
 }

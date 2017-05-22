@@ -46,18 +46,11 @@ class FormHelper extends HtmlHelper {
      * @return type
      */
     public function create($name, $action = false) {
-        $this->setName(strtolower($name));
-        
-        if (!array_key_exists($this->name, $this->activeModels)) {
-            pr("Error from FormHelper \n the model name \"$name\" not found in controller!");
-        } else {
-            $this->activeModel = $this->activeModels[$this->name];
-        }
-        
+        $this->setNames($name);
         $this->setAction($action);
         
         $formArgs = [
-            'id'    => $this->name . 'Form',
+            'id'    => $this->name,
             'name'  => $this->name,
             'action'=> $this->action,
             'method'=> 'post'
@@ -107,8 +100,16 @@ class FormHelper extends HtmlHelper {
      * 
      * @param type $name
      */
-    public function setName($name) {
-        $this->name = $name;
+    public function setNames($name) {
+        $lowerName = strtolower($name);
+        
+        if (!array_key_exists($lowerName, $this->activeModels)) {
+            pr("Error from FormHelper \n the model name \"$name\" not found in controller!");
+        } else {
+            $this->activeModel = $this->activeModels[$lowerName];
+        }
+
+        $this->name = $lowerName . 'Form';
     }
     
     /**
