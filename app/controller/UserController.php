@@ -3,6 +3,7 @@
 namespace iBDL\App\Controller;
 
 use iBDL\Core\Controller;
+use \iBDL\Core\Request;
 
 class UserController extends Controller {
     
@@ -16,8 +17,8 @@ class UserController extends Controller {
     public function registrar() {
         $user = $this->loadModel('user');
         if($this->isPut() && $user->validation()) {
-            pr('all ok');
-            $user->save();
+            pr(Request::get('userForm'));
+            $user->save($user->getRequestData());
         }
         //pr(__METHOD__);
         $this->_set('title', 'Registration');

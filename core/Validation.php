@@ -21,6 +21,29 @@ class Validation {
         $this->model = $model;
     }
     
+    public function equal($data, $rule) {
+        $message = ($rule['message']) ? $rule['message'] :
+                    'it must does match with "' . $rule['field'] . '"';
+        $dataForEqual = strtolower($this->model->modelName)
+                            . 'Form.' . $rule['field'];
+
+        return ($data == Request::get($dataForEqual)) ? null : $message;        
+    }
+    
+    public function numbers($data, $rule) {
+        preg_match("/[0-9]*/u", $data, $matches);
+        $message = ($rule['message']) ? $rule['message'] :
+                    'it must be only numbers';
+        
+        return ($data !== $matches[0]) ? $message : null;
+    }
+    
+    /**
+     * 
+     * @param type $data
+     * @param type $rule
+     * @return type
+     */
     public function lenght($data, $rule) {
         $len = mb_strlen($data);
         $min = (empty($rule['min'])) ? 3 : $rule['min'];
@@ -31,7 +54,6 @@ class Validation {
                     . $min . " - " . $max;
         
         return ($len >= $min && $len <= $max) ? null : $message;
-            
     }
     
     public function required($data, $rule) {

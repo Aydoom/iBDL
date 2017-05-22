@@ -26,17 +26,12 @@ class FormHelper extends HtmlHelper {
     public $activeModels = [];
     public $activeModel;
     
+    /**
+     * Constructor
+     * @param type $models
+     */
     public function __construct($models) {
         $this->activeModels = array_change_key_case($models, CASE_LOWER);
-    }
-    
-    public function div($name, $content) {
-        $class = "form-group";
-        if (!empty($this->activeModel->validErrors[$name])) {
-            $class.= ' has-error';
-        }
-        
-        return parent::div($class, $content);
     }
     
     /**
@@ -73,6 +68,35 @@ class FormHelper extends HtmlHelper {
     /**
      * 
      * @param type $name
+     * @param type $content
+     * @return type
+     */
+    public function div($name, $content) {
+        $class = "form-group";
+        if (!empty($this->activeModel->validErrors[$name])) {
+            $class.= ' has-error';
+        }
+        
+        return parent::div($class, $content);
+    }
+
+    /**
+     * 
+     * @param type $name
+     * @return type
+     */
+    public function end($name) {
+        $attrs = [
+            'type'  => 'submit',
+            'class' => 'btn btn-default'
+        ];
+        
+        return $this->block("button", $name, $attrs) . $this->endTag("form");
+    }
+    
+    /**
+     * 
+     * @param type $name
      * @param type $value
      * @param type $args
      * @return type
@@ -89,56 +113,13 @@ class FormHelper extends HtmlHelper {
     
     /**
      * 
-     * @param type $action
-     */
-    public function setAction($action = false) {
-        $this->action = ($action) ? Router::$rootDir . $action : 
-            Router::$rootDir . Router::$request;
-    }
-    
-    /**
-     * 
      * @param type $name
-     */
-    public function setNames($name) {
-        $lowerName = strtolower($name);
-        
-        if (!array_key_exists($lowerName, $this->activeModels)) {
-            pr("Error from FormHelper \n the model name \"$name\" not found in controller!");
-        } else {
-            $this->activeModel = $this->activeModels[$lowerName];
-        }
-
-        $this->name = $lowerName . 'Form';
-    }
-    
-    /**
-     * 
-     * @param type $name
-     */
-    public function setMethod($name) {
-        $this->method = (empty($this->post[$name])) ? "put" : "post";
-    }
-    
-    /**
-     *
+     * @param type $attrs
+     * @return type
      */
     public function input($name, $attrs = []) {
         
         $id = 'Input' . ucfirst($attrs['type']) . ucfirst($name);
-        
-        if (!empty($this->activeModel->validErrors[$name])) {
-            $attrs['label'].= $this->block("small",
-                    " *" . $this->activeModel->validErrors[$name][0]);
-        }        
-        
-        if ($attrs['label'] === false) {
-            $label = null;
-        } elseif (!empty($attrs['label'])) {
-            $label = $this->label($id, $attrs['label']);
-        } else {
-            $label = $this->label($id, ucfirst(strtolower($name)));
-        }
         
         $inputAttrs = array_merge([
             'class' => 'form-control',
@@ -151,30 +132,41 @@ class FormHelper extends HtmlHelper {
             $inputAttrs['value'] = $this->post[$name];
         }
         
-        return $label . $this->tag('input', $inputAttrs);
+        return $this->label($id, $name, $attrs['label'])
+                . $this->tag('input', $inputAttrs);
     }
-    
     
     /**
      * 
+     * @param type $id
      * @param type $name
-     * @param type $attrs
+     * @param type $text
      * @return type
      */
-    public function text($name, $attrs = []) {
-        $content = $this->input($name, array_merge($attrs, ['type' => 'text']));
+    public function label($id, $name, $text) {
+        $model = $this->activeModel;
+        if(isset($model->validRules[$name])) {
+            foreach ($model->validRules[$name] as $rule) {
+                if($rule['rule'] === 'required') {
+                    $text.= "*";
+                    break;
+                }
+            }
+        }
+
+        if (!empty($model->validErrors[$name])) {
+            $text.= $this->block("small", " - " . $model->validErrors[$name][0]);
+        }
         
-        return $this->div($name, $content);
-    }
-    
-    
-    /**
-     *
-     */
-    public function password($name, $attrs = []) {
-        $content = $this->input($name, array_merge($attrs, ['type' => 'password']));
+        if ($text === false) {
+            $label = null;
+        } elseif (!empty($text)) {
+            $label = parent::label($id, $text);
+        } else {
+            $label = parent::label($id, ucfirst(strtolower($name)));
+        }
         
-        return $this->div($name, $content);
+        return $label;
     }
     
     /**
@@ -205,18 +197,61 @@ class FormHelper extends HtmlHelper {
         
         return $this->div($name, $content);
     }
-
+    
     /**
      * 
      * @param type $name
+     * @param type $attrs
      * @return type
      */
-    public function end($name) {
-        $attrs = [
-            'type'  => 'submit',
-            'class' => 'btn btn-default'
-        ];
+    public function password($name, $attrs = []) {
+        $content = $this->input($name, array_merge($attrs, ['type' => 'password']));
         
-        return $this->block("button", $name, $attrs) . $this->endTag("form");
+        return $this->div($name, $content);
+    }
+    
+    /**
+     * 
+     * @param type $action
+     */
+    public function setAction($action = false) {
+        $this->action = ($action) ? Router::$rootDir . $action : 
+            Router::$rootDir . Router::$request;
+    }
+    
+    /**
+     * 
+     * @param type $name
+     */
+    public function setMethod($name) {
+        $this->method = (empty($this->post[$name])) ? "put" : "post";
+    }
+    
+    /**
+     * 
+     * @param type $name
+     */
+    public function setNames($name) {
+        $lowerName = strtolower($name);
+        
+        if (!array_key_exists($lowerName, $this->activeModels)) {
+            pr("Error from FormHelper \n the model name \"$name\" not found in controller!");
+        } else {
+            $this->activeModel = $this->activeModels[$lowerName];
+        }
+
+        $this->name = $lowerName . 'Form';
+    }    
+    
+    /**
+     * 
+     * @param type $name
+     * @param type $attrs
+     * @return type
+     */
+    public function text($name, $attrs = []) {
+        $content = $this->input($name, array_merge($attrs, ['type' => 'text']));
+        
+        return $this->div($name, $content);
     }
 }

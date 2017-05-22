@@ -5,7 +5,7 @@
             
             echo $this->form->text("name", ['label' => 'Login']);
             echo $this->form->text("username", ['label' => 'Your Name']);
-            echo $this->form->password("Password");
+            echo $this->form->password("password", ['label' => 'Password']);
             echo $this->form->password("repeatPassword", ['label' => 'Repeat Password']);
             echo $this->form->text("key", ['label' => 'Invitation key']);
            
