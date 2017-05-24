@@ -25,31 +25,30 @@ class DB extends \PDO{
     public function __construct($config, $table)
     {
         $this->config = $config;
+        $this->table = $table;
         
         $dns = 'mysql:host=' . $config['host']
                 . ';port=3306;dbname=' . $config['dbname'];
-        $this->table = $table;
+        
         $options = [\PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'];
         
-        parent::__construct($dns, $config['user'], $config['password'], $options);
+        try {
+            parent::__construct($dns, $config['user'], $config['password'], $options);
+        } catch (PDOException $e) {
+            die('Подключение не удалось: ' . $e->getMessage());
+        }        
     }
     
     public function find($conditions = []) {
-        $fields = (!empty($conditions['fields'])) ? 
-                implode(", ", $conditions['fields']) : "*";
-        
-        $sql = "SELECT $fields FROM `{$this->table}`";
-        $query = $this->getPrepare($sql, $conditions);
-        
-        $result = $this->query('SELECT ' . $fields . ' FROM `' . $this->table . 
-                '` ' . $this->getCondition($conditions));
-        pr([$conditions, $result, 'SELECT ' . $fields . ' FROM `' . $this->table . 
-                '` ' . $this->getCondition($conditions)], false);
+        $query = $this->prepare(Sql::getSelect($this->table, $conditions));
+        $cond = (empty($conditions['where'])) ? [] : $conditions['where'];
+        $query->execute($cond);
+
         $output = [];
-        foreach ($result as $row) {
+        foreach ($query as $row) {
             $output[] = $row;
         }
-
+        
         return $output;
     }
     

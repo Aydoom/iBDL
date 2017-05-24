@@ -20,6 +20,8 @@ class Sql {
                                                     . ' FROM `' . $table . '`';
         
         $sql.= self::getConditions($conditions);
+        
+        return $sql;
     }
     
     static public function getFields($table, $conditions) {
@@ -37,10 +39,11 @@ class Sql {
     }
     
     static public function getConditions($conditions) {
-        foreach($cond as $operator => $value) {
+        $output = [];
+        foreach($conditions as $operator => $value) {
             switch ($operator) {
                 case 'where':
-                    $output[10] = "WHERE " . self::getWhere($value);                    
+                    $output[10] = self::getWhere($value);                    
                     break;
                 case 'limit' :
                     $output[20] = "LIMIT $value";
@@ -49,5 +52,27 @@ class Sql {
         }
         
         return implode(" ", $output);
+    }
+    
+    static public function getWhere($conditions) {
+        if (is_array($conditions)) {
+            $output = " WHERE";
+            $where = [];
+            
+            foreach($conditions as $field => $val) {
+                $matches = [];
+                preg_match_all('/([=!<>]+)(.+)/u', "=$val", $matches);
+                $sign = (strlen($matches[1][0]) > 1) ? ltrim($matches[1][0], "=") 
+                                                                : $matches[1][0];
+                $where[] = " `$field` $sign :$field"; 
+            }
+            
+            $output.= implode(' AND', $where);
+            
+        } else {
+            $output = NULL;
+        }
+        
+        return $output;
     }
 }
