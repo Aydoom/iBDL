@@ -17,10 +17,13 @@ class UserTable extends \PMMigration\Core\Table {
         
         $this->defId("id");
         $this->defId("id_user_group", false);
-        $this->defVarchars(["name", "username", "email", "password", "token"]);
+        $this->defVarchars(["name", "username"]);
+        $this->addField("email", "text")->def("NULL");
+        $this->defVarchar("password");
         $this->addField("block", "tinyint")->def("NULL");
         $this->addField("sendEmail", "tinyint")->def("NULL");
         $this->defDates(["registerDate", "lastvisitDate"]);
+        $this->addField("token", "text")->def("NULL");
     }
 
 }

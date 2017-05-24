@@ -19,9 +19,11 @@ class DB extends \PDO {
     static public function connect($config) {
         $connect = $config['driver'] . ':host=' . $config['host']
             . ';dbname=' . $config['dbname'];
-       
+        $options = [\PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'];
+        
         try {
-            self::$db = new static($connect, $config['user'], $config['password']);
+            self::$db = new static($connect, $config['user'], 
+                                                $config['password'], $options);
         } catch (PDOException $e) {
             die('Подключение не удалось: ' . $e->getMessage());
         }

@@ -7,8 +7,13 @@ function pr($array, $end = true)
 			$array = htmlspecialchars($array);
 		} else {
 			foreach ($array as $key => $str) {
-				if (!is_array($str)) {
-					$array[$key] = htmlspecialchars($str);
+				if (is_string($str)) {
+                    try {
+                        $array[$key] = htmlspecialchars($str);
+                    } catch (Exception $e) {
+                        var_dump($str);
+                        die();
+                    }
 				}
 			}
 		}

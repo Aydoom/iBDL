@@ -16,15 +16,17 @@ class UserController extends Controller {
 	
     public function registrar() {
         $user = $this->loadModel('user');
+        $error = '';
         if($this->isPut() && $user->validation()) {
-            pr(Request::get('userForm'));
-            $user->save($user->getRequestData());
+            if($user->save(Request::get('userForm'))) {
+                
+            } else {
+                $error = '<span class="text-danger"> - Error: something wrong</span>';
+            }            
         }
-        //pr(__METHOD__);
-        $this->_set('title', 'Registration');
+
+        $this->_set('title', 'Registration' . $error);
     }
-
-
 
     public function create() {
 

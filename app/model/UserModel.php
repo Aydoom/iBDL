@@ -20,7 +20,7 @@ class UserModel extends Model{
     public $validRules = [
         'name' => [
             ['rule' => 'required', 'message' => 'it must be filled'],
-            ['rule' => 'text', 'message' => 'it must content the only letters'],
+            ['rule' => 'textEn', 'message' => 'it must content the only english letters'],
             ['rule' => 'lenght', 'min' => 3, 'max' => 15],
             ['rule' => 'unique'],
         ],
@@ -42,7 +42,29 @@ class UserModel extends Model{
         'key' => [
             ['rule' => 'required', 'message' => 'it must be filled'],
             ['rule' => 'numbers', 'message' => 'it must content the only numbers'],
+            ['rule' => 'hasInTable', 'message' => 'key undefinded'],
         ],
     ];
     
+    public function save($data) {
+
+        return parent::save([
+            'id_user_group' => 1,
+            'name'          => $data['name'],
+            'username'      => $data['username'],
+            'email'         => $data['email'],
+            'password'      => md5(md5($data['password'])),
+            'registerDate'  => date("Y-m-d H:i:s")
+        ]);
+    }
+        
+    public function hasInTable($data, $rule) {
+        $conditions = [
+                'where' => ['code' => $data, 'id_user' => 'NULL'],
+                'limit' => 1,
+        ];
+        
+        return empty($this->loadModel('key')->find($conditions)) ? null 
+                                                            : $rule['message'];
+    }
 }

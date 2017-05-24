@@ -30,6 +30,18 @@ class Validation {
         return ($data == Request::get($dataForEqual)) ? null : $message;        
     }
     
+    public function getListRules() {
+        $methods = get_class_methods($this);
+        $ignore = ['__construct'];
+        
+        foreach($ignore as $method) {
+            $key = array_search($method, $methods);
+            unset($methods[$key]);
+        }
+        
+        return $methods;
+    }
+    
     public function numbers($data, $rule) {
         preg_match("/[0-9]*/u", $data, $matches);
         $message = ($rule['message']) ? $rule['message'] :
@@ -62,6 +74,12 @@ class Validation {
     
     public function text($data, $rule) {
         preg_match("/[a-zA-Zа-яА-ЯЁё,.\s]*/u", $data, $matches);
+
+        return ($data !== $matches[0]) ? $rule['message'] : null;
+    }
+    
+    public function textEn($data, $rule) {
+        preg_match("/[a-zA-Z,.\s]*/", $data, $matches);
 
         return ($data !== $matches[0]) ? $rule['message'] : null;
     }

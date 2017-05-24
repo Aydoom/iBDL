@@ -43,6 +43,7 @@ class Auth {
      */
     static public function login($userName, $password) {
         $user = DB::getUserByPsw($userName, $password);
+        $user['token'] = md5(md5(rand(10000, 100000)));
     }
     
     /**
