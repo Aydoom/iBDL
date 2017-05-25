@@ -36,12 +36,24 @@ class DB extends \PDO {
         return (self::$db->query($query));
     }
     
-    static public function getUserByToken($user, $token) {
-        $query = sql_placeholder('SELECT * FROM `user` LEFT JOIN `user_group`'
-                            . ' ON user.id_user_group = id.user_group'
-                            . ' WHERE user.id = ' . strval($user)
-                            . ' AND user.token = ' . strval($token));
+    static public function getUserByToken($id, $token) {
+        $query = 'SELECT * FROM `user` LEFT JOIN `user_group`'
+                            . ' ON id_user_group.user = id.user_group'
+                            . ' WHERE user.id = ' . strval($id)
+                            . ' AND user.token = ' . strval($token);
 
         return (self::$db->query($query));
     }
-}
+    
+    static public function getUserByPsw($user, $password) {
+        $query = self::$db->prepare(
+            'SELECT `user`.*, `user_group`.`type` as `type_group`'
+            . ' FROM `user` LEFT JOIN `user_group`'
+            . ' ON `user`.`id_user_group` = `user_group`.`id`'
+            . ' WHERE `user`.`name` = ?'
+            . ' AND `user`.`password` = ?'
+            . ' LIMIT 1');
+        $query->execute([$user, md5(md5($password))]);
+        
+        return $query->fetchAll();
+    }}

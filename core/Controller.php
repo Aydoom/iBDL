@@ -10,6 +10,7 @@ class Controller {
     public $models = [];
 
     public $view;
+    public $redirect;
 
     public $name;
     public $action;
@@ -52,5 +53,9 @@ class Controller {
         $this->models[$modelName] = new $className();
         
         return $this->models[$modelName];
+    }
+    
+    public function redirect($uri) {
+        $this->redirect = $uri;
     }
 }

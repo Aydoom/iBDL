@@ -5,6 +5,8 @@ namespace iBDL\App\Controller;
 use iBDL\Core\Controller;
 use \iBDL\Core\Request;
 
+use PAuth\Core\Auth;
+
 class UserController extends Controller {
     
     public $layout = 'user';
@@ -19,7 +21,8 @@ class UserController extends Controller {
         $error = '';
         if($this->isPut() && $user->validation()) {
             if($user->save(Request::get('userForm'))) {
-                
+                Auth::login(Request::get('userForm.name'), Request::get('userForm.password'));
+                $this->redirect(Auth::getFalseUrl());
             } else {
                 $error = '<span class="text-danger"> - Error: something wrong</span>';
             }            

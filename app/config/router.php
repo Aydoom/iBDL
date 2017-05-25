@@ -3,6 +3,13 @@
 $router = new iBDL\Core\Router();
 use iBDL\Core\App as App;
 
+/**
+$router->middleware("*", ['PAuth\App\Middleware\HasNotAdmin', 'index'], function(){
+        $app = new App();
+        $app->redirect("user/registrar");
+    });
+*/
+
 $router->access(['PAuth\Core\Auth', 'isLogin'], false)
             ->any("/user/:action", function($action) {
                 $app = new App();

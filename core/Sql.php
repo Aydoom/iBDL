@@ -55,20 +55,32 @@ class Sql {
     }
     
     static public function getWhere($conditions) {
+        $handler = function ($field, $val, $glue, $hasGlue) {
+            $matches = [];
+            preg_match_all('/([=!<>]+)(.+)/u', "=$val", $matches);
+            $sign = (strlen($matches[1][0]) > 1) ? ltrim($matches[1][0], "=") 
+                                                            : $matches[1][0];
+            $echoGlue = ($hasGlue) ? strtoupper($glue) : "";
+                                                            
+            return " $echoGlue `$field` $sign :$field";             
+        };
+        
         if (is_array($conditions)) {
-            $output = " WHERE";
-            $where = [];
+            $output = " WHERE ";
             
+            $hasGlue = false;
             foreach($conditions as $field => $val) {
-                $matches = [];
-                preg_match_all('/([=!<>]+)(.+)/u', "=$val", $matches);
-                $sign = (strlen($matches[1][0]) > 1) ? ltrim($matches[1][0], "=") 
-                                                                : $matches[1][0];
-                $where[] = " `$field` $sign :$field"; 
+                
+                if(is_array($val)) {
+                    foreach($val as $f => $v) {
+                        $output.= $handler($f, $v, $field, $hasGlue);
+                        $hasGlue = true;
+                    }
+                } else {
+                    $output.= $handler($field, $val, "AND", $hasGlue);
+                    $hasGlue = true;
+                }
             }
-            
-            $output.= implode(' AND', $where);
-            
         } else {
             $output = NULL;
         }

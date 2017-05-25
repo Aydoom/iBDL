@@ -17,6 +17,15 @@ class Auth {
     }
     
     /**
+     *
+     */
+    static public function getFalseUrl() {
+        Session::get('falseUri');
+  
+        return false;
+    }
+    
+    /**
      * 
      * @return boolean
      */
@@ -44,6 +53,7 @@ class Auth {
     static public function login($userName, $password) {
         $user = DB::getUserByPsw($userName, $password);
         $user['token'] = md5(md5(rand(10000, 100000)));
+        pr($user);
     }
     
     /**

@@ -26,4 +26,8 @@ class Session {
     static public function set($name, $value) {
         $_SESSION[$name] = $value;
     }
+    
+    static public function get($name) {
+        return $_SESSION[$name];
+    }
 }

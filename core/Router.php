@@ -82,7 +82,7 @@ class Router
     /**
      *
     */
-    public function compareRoute($route) {
+    private function compareRoute($route) {
         $paths = array_slice(explode("/", $route), 1);
 
         if (count($paths) !== count($this->paths)) {
@@ -139,6 +139,13 @@ class Router
         return self::$rootDir;
     }
     
+    public function middleware($route, $middleware, $action, $ok = true) {
+        if(call_user_func($middleware) === $ok) {
+            $this->run($route, $action);
+        }
+        
+        return $this;
+    }
    
     /**
      * 
@@ -186,7 +193,7 @@ class Router
         return $this;
     }
     
-    public function setMethod() {
+    private function setMethod() {
         $method = strtolower(filter_input(INPUT_SERVER, 'REQUEST_METHOD', 
                             FILTER_SANITIZE_SPECIAL_CHARS));
         if ($method === 'post') {

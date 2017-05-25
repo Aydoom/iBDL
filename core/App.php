@@ -46,6 +46,11 @@ class App {
         $this->controller = new $className($action);
         $this->controller->$action($param);
         
+        if ($this->controller->redirect) {
+            $this->redirect($this->controller->redirect);
+            die();
+        }
+        
         $this->html = new \iBDL\Plugins\Helpers\HtmlHelper();
         $this->form = new \iBDL\Plugins\Helpers\FormHelper($this->controller->models);
 
