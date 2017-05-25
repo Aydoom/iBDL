@@ -20,9 +20,7 @@ class Auth {
      *
      */
     static public function getFalseUrl() {
-        Session::get('falseUri');
-  
-        return false;
+        return Session::get('falseUri');
     }
     
     /**
@@ -30,6 +28,7 @@ class Auth {
      * @return boolean
      */
     static public function isLogin() {
+        //pr($_COOKIE, false);
         $userID = Cookie::getUserID();
         $token = Cookie::getUserToken();
 
@@ -38,6 +37,7 @@ class Auth {
         } else {
             return self::falseLogin();
         }
+        //pr(self::$user);
         
         if (empty(self::$user)) {
             return self::falseLogin();
@@ -51,9 +51,10 @@ class Auth {
      *
      */
     static public function login($userName, $password) {
-        $user = DB::getUserByPsw($userName, $password);
-        $user['token'] = md5(md5(rand(10000, 100000)));
-        pr($user);
+        self::$user = DB::getUserByPsw($userName, $password);
+        Cookie::setUserId(self::$user['id']);
+        Cookie::setUserToken(md5(md5(rand(10000, 100000))));
+        DB::saveUserToken(self::$user['id']);
     }
     
     /**

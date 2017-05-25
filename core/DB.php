@@ -57,11 +57,10 @@ class DB extends \PDO{
                     . $this->table . "` " . "("
                     . implode(", ", array_keys($data)) . ")"
                     . " VALUES(:" . implode(", :", array_keys($data)) . ")");
-
-        try { 
-            $query->execute($data);
-        } catch(PDOExecption $e) { 
-            pr("Error!: " . $e->getMessage());
+       
+        $query->execute($data);
+        if(!$query) {
+            pr($this->errorInfo());
         }
 
         return $this->lastInsertId();

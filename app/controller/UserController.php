@@ -21,8 +21,13 @@ class UserController extends Controller {
         $error = '';
         if($this->isPut() && $user->validation()) {
             if($user->save(Request::get('userForm'))) {
-                Auth::login(Request::get('userForm.name'), Request::get('userForm.password'));
-                $this->redirect(Auth::getFalseUrl());
+                Auth::login(Request::get('userForm.name'), 
+                        Request::get('userForm.password'));
+                
+                $uri = (Auth::getFalseUrl() === "/user/registrar") ? "/"
+                                                        : Auth::getFalseUrl();
+                pr($uri);
+                $this->redirect($uri);
             } else {
                 $error = '<span class="text-danger"> - Error: something wrong</span>';
             }            

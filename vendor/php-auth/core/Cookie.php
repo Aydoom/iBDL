@@ -16,11 +16,19 @@ namespace PAuth\Core;
 class Cookie {
 
     static function getUserID() {
-        return filter_input($_COOKIE['userId'], FILTER_SANITIZE_SPECIAL_CHARS);
+        return filter_input(INPUT_COOKIE, 'userId', FILTER_SANITIZE_SPECIAL_CHARS);
     }
 
     static function getUserToken() {
-        return filter_input($_COOKIE['token'], FILTER_SANITIZE_SPECIAL_CHARS);
+        return filter_input(INPUT_COOKIE, 'token', FILTER_SANITIZE_SPECIAL_CHARS);
+    }
+    
+    static function setUserID($id) {
+        setcookie("userId", $id, time()+3600);
+    }
+
+    static function setUserToken($token) {
+        setcookie("token", $token, time()+3600);
     }
     
     static function updateTime() {
