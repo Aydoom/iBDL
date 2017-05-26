@@ -44,6 +44,7 @@ class Router
      * @return $this
      */
     public function access($action, $ok = true) {
+        logs(__METHOD__);
         if($ok) {
             $this->access = call_user_func($action);
         } else {
@@ -60,6 +61,7 @@ class Router
      * @return $this
      */
     public function any($route, $action) {
+        logs(__METHOD__);
         $this->run($route, $action);
 
         return $this;
@@ -77,6 +79,11 @@ class Router
         }
         
         return $this;
+    }
+    
+    public function end() {
+        logs(__METHOD__);
+        $this->access = true;
     }
     
     /**
@@ -120,6 +127,7 @@ class Router
      * @return $this
      */
     public function get($route, $action) {
+        logs(__METHOD__);
         if (self::$method === 'get') {
             $this->run($route, $action);
         }
@@ -154,6 +162,7 @@ class Router
      * @return $this
      */
     public function post($route, $action) {
+        logs(__METHOD__);
         if (self::$method === 'post') {
             $this->run($route, $action);
         }
@@ -182,6 +191,7 @@ class Router
      * @return $this
      */
     public function run($route, $action) {
+        pr($route, false);
         if (self::$exit || !$this->access) {
             return $this;
         } elseif (is_callable($action) && 

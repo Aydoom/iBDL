@@ -7,6 +7,7 @@ define("ROOT", realpath(__DIR__ . DS . "..") . DS);
 
     define("CONFIG", ROOT . "config" . DS);
     define("CORE", ROOT . "core" . DS);
+    define("LOGS", ROOT . "logs" . DS);
     define("PLUGINS", ROOT . "plugins" . DS);
     define("VENDOR", ROOT . "vendor" . DS);
     define("APP", ROOT . "app" . DS);
@@ -23,6 +24,8 @@ define("ROOT", realpath(__DIR__ . DS . "..") . DS);
 require_once CONFIG . "autoloader.php";
 require_once CONFIG . "basic.php";
 
+// Logs
+define ("LOGSWRITE", true);
 
 // Include DB
 function config() {

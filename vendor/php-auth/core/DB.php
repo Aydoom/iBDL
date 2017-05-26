@@ -55,14 +55,9 @@ class DB extends \PDO {
             . ' AND `user`.`token` = ?'
             . ' LIMIT 1');
         $query->execute([$id, $token]);
+        //pr($query);
         $user = $query->fetchAll();
-        /*pr($user, false);
-        pr('SELECT `user`.*, `user_group`.`type` as `type_group`'
-            . ' FROM `user` LEFT JOIN `user_group`'
-            . ' ON `user`.`id_user_group` = `user_group`.`id`'
-            . ' WHERE `user`.`id` = ?'
-            . ' AND `user`.`token` = ?'
-            . ' LIMIT 1');/**/
+
         return $user[0];
     }
     

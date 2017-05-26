@@ -28,10 +28,12 @@ class Auth {
      * @return boolean
      */
     static public function isLogin() {
+        logs(__METHOD__);
         //pr($_COOKIE, false);
         $userID = Cookie::getUserID();
         $token = Cookie::getUserToken();
 
+        //pr([$userID, $token], false);
         if (!empty($userID) && !empty($token)) {
             self::$user = DB::getUserByToken($userID, $token);
         } else {
@@ -52,9 +54,12 @@ class Auth {
      */
     static public function login($userName, $password) {
         self::$user = DB::getUserByPsw($userName, $password);
+        //pr($_COOKIE, false);
         Cookie::setUserId(self::$user['id']);
         Cookie::setUserToken(md5(md5(rand(10000, 100000))));
+        //pr($_COOKIE, false);
         DB::saveUserToken(self::$user['id']);
+        //pr(self::$user['id']);
     }
     
     /**

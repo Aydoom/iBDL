@@ -26,3 +26,8 @@ function pr($array, $end = true)
 		die();
 	}
 }
+
+function logs($content = "") {
+    if (LOGSWRITE)
+        iBDL\Core\Log::write($content);
+}

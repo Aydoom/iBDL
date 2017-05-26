@@ -42,6 +42,7 @@ class App {
      */
     public function run($controller, $action, $param = null)
     {
+        $logs();
         $className = 'iBDL\App\Controller\\' . ucfirst($controller) . "Controller";
         $this->controller = new $className($action);
         $this->controller->$action($param);
@@ -63,7 +64,7 @@ class App {
     public function redirect($uri)
     {
         $location = 'http://' . $_SERVER['SERVER_NAME']
-            . $_SERVER['REQUEST_URI'] . $uri;
+            . substr($_SERVER['SCRIPT_NAME'], 0 , -9) . ltrim($uri, '/');
         header('Location: ' . $location);
     }
 	
