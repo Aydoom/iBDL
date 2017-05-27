@@ -2,7 +2,7 @@
 
 namespace PMMigration\Tables;
 
-class KeyTable extends \PMMigration\Core\Table {
+class KeyTable extends \PMMigration\Core\DefTable {
 	
     public $name = 'key';
     public $fields = [];

@@ -34,7 +34,7 @@ class Router
         self::$request = substr($requestUri, -$lenRequest);                
        
         $this->setMethod();
-        $this->paths = array_slice(explode("/", self::$request), 1);
+        $this->paths = explode("/", self::$request);
     }
     
     /**
@@ -61,6 +61,7 @@ class Router
      * @return $this
      */
     public function any($route, $action) {
+        //pr([__METHOD__, $route], false);
         $this->run($route, $action);
 
         return $this;
@@ -91,10 +92,12 @@ class Router
      *
     */
     private function compareRoute($route) {
-        logs(__METHOD__ . "[$route] <> [" . implode("/", $this->paths));
-        $paths = array_slice(explode("/", $route), 1);
+        logs(__METHOD__ . "[$route] <> [" . implode("/", $this->paths) . ']');
+        //pr(['req' => $route, 'uri' => implode("/", $this->paths)], false);
+        $paths = explode("/", $route);
 
         if (count($paths) !== count($this->paths)) {
+            //pr('out by different counts', false);
             logs(__METHOD__ . 'return false-1]');
             return false;
         }
@@ -104,6 +107,7 @@ class Router
                 $name = ltrim($path, ":");
                 $this->args[$name] = $this->paths[$key];
             } elseif ($path != $this->paths[$key]) {
+                //pr('out by different $path', false);
                 logs(__METHOD__ . 'return false-2]');
                 return false;
             } else {
@@ -111,6 +115,7 @@ class Router
             }
         }
         //pr($this->args);
+        //pr('compareRoute: true', false);
         logs(__METHOD__ . 'return true');
         return true;
     }
@@ -199,14 +204,17 @@ class Router
         logs(__METHOD__ . "[$route]");
         logs((empty(self::$exit)) ? 'self::$exit [' . 'false]' : 'self::$exit [' . 'true]');
         logs((empty($this->access)) ? '$this->access [' . 'false]' : '$this->access [' . 'true]');
+        //pr([__METHOD__, $route], false);
+        //pr(['$route === *' => ($route === '*'),'$this->compareRoute($route)' => $this->compareRoute($route)], false);
         if (self::$exit || !$this->access) {
+            //pr([__METHOD__, 'out by exit or access', 'exit' => self::$exit, 'access' => $this->access]);
             return $this;
-        } elseif (is_callable($action) && 
-                ($route === '*' || $this->compareRoute($route))) {
+        } elseif ($route === '*' || $this->compareRoute($route)) {
             call_user_func_array($action, $this->args);
+            //pr([__METHOD__, 'ok']);
             self::$exit = true;
         }
-        
+        //pr([__METHOD__, 'just out'], false);
         return $this;
     }
     

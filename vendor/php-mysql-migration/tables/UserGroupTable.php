@@ -13,7 +13,7 @@ namespace PMMigration\Tables;
  *
  * @author Aydoom
  */
-class UserGroupTable extends \PMMigration\Core\Table {
+class UserGroupTable extends \PMMigration\Core\DefTable {
 	
     public $name = 'user_group';
     public $fields = [];
@@ -27,7 +27,16 @@ class UserGroupTable extends \PMMigration\Core\Table {
         parent::__construct($name);
         
         $this->defId("id");
-        $this->addField("type", "varchar")->len("10");
+        $this->addField("level", "int")->len("1");
+        $this->addField("type", "varchar")->len("50");
     }
 
+    
+    public function write() {
+        $fields = ['level', 'type'];
+        
+        $this->setInsert($fields, [1, 'super_admin']);
+        $this->setInsert($fields, [2, 'admin']);
+        $this->setInsert($fields, [3, 'specialist']);
+    }
 }

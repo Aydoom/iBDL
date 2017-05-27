@@ -28,6 +28,7 @@ class Auth {
      * @return boolean
      */
     static public function isLogin() {
+
         logs(__METHOD__);
         //pr($_COOKIE, false);
         $userID = Cookie::getUserID();
@@ -36,7 +37,9 @@ class Auth {
         logs('userID=>' . $userID . ":" . 'token=>' . $token);
         //pr([$userID, $token], false);
         if (!empty($userID) && !empty($token)) {
+            //pr('has cookies', false);
             self::$user = DB::getUserByToken($userID, $token);
+            //pr(self::$user, false);
         } else {
             logs('return false by empty Cookie');
             return self::falseLogin();
@@ -48,6 +51,7 @@ class Auth {
             return self::falseLogin();
         } else {
             logs('return true');
+            //pr('return true', false);
             Cookie::updateTime();
             return true;
         }

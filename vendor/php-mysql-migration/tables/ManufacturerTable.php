@@ -13,7 +13,7 @@ namespace PMMigration\Tables;
  *
  * @author Aydoom
  */
-class ManufacturerTable extends \PMMigration\Core\Table {
+class ManufacturerTable extends \PMMigration\Core\DefTable {
 
     public $name = 'manufacturer';
     public $fields = [];

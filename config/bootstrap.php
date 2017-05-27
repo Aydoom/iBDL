@@ -25,7 +25,7 @@ require_once CONFIG . "autoloader.php";
 require_once CONFIG . "basic.php";
 
 // Logs
-define ("LOGSWRITE", true);
+define ("LOGSWRITE", false);
 
 // Include DB
 function config() {

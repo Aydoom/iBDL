@@ -13,7 +13,7 @@ namespace PMMigration\Tables;
  *
  * @author Aydoom
  */
-class SessionTable extends \PMMigration\Core\Table {
+class SessionTable extends \PMMigration\Core\DefTable {
 	
     public $name = 'session';
     public $fields = [];

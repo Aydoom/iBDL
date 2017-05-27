@@ -6,11 +6,14 @@ use PMMigration\Core\Fields as Fields;
 /**
  * 
  */
-class Table {
+abstract class Table {
     
     public $name = "table";
     public $fields = [];
+    public $insert = [];
  
+    abstract public function write();
+
     /**
      * 
      * @param type $name
@@ -20,6 +23,8 @@ class Table {
         if ($name) {
             $this->name = $name;
         }
+        
+        $this->write();
     }
  
     /**
@@ -47,6 +52,10 @@ class Table {
         
         return $this->fields[$name];
     }
+	
+    public function getFields() {
+        return $this->fields;
+    }
     
     /**
      * 
@@ -66,91 +75,11 @@ class Table {
 
         return $query;
     }
-    
-    /**
-     * 
-     * @param type $name
-     */
-    public function defDate($name)
-    {
-        $this->addField($name, "datetime");
-    }
-    
-    /**
-     * 
-     * @param type $names
-     */
-    public function defDates($names)
-    {
-        foreach ($names as $name) {
-            $this->defDate($name);
-        }
-    }
-    
-    /**
-     * 
-     * @param type $name
-     * @param type $primary
-     */
-    public function defId($name, $primary = true)
-    {
-        if ($primary) {
-            $this->addField($name, 'int')
-                ->len(11)
-                ->def('not null')
-                ->autoincrement()
-                ->primary_key();
-        } else {
-            $this->addField($name, 'int')
-                ->len(11)
-                ->def('not null');
-        }
-    }
-    /**
-     * 
-     * @param type $name
-     * @param type $primary
-     */
-    public function defIds($names)
-    {
-        foreach($names as $name) {
-            $this->defId($name, false);
-        }
-    }
-    
-    /**
-     * 
-     */
-    public function defText()
-    {
-        $this->addField('id', 'text')->len(512);
-    }
 
-    /**
-     * 
-     * @param type $name
-     */
-    public function defVarchar($name)
-    {
-        $this->addField($name, 'varchar')
-                ->len(100)
-                ->def('not null')
-                ->compare('utf-8');
-    }
-
-    /**
-     * 
-     * @param type $names
-     */
-    public function defVarchars($names)
-    {
-        foreach($names as $name) {
-            $this->defVarchar($name);
-        }
-    }
-	
-	public function getFields()
-    {
-        return $this->fields;
+    public function setInsert($fields = [], $values = []) {
+        $query = "INSERT INTO `{$this->name}` (`" . implode('`, `', $fields) . "`)"
+                . "VALUES ('" . implode("', '", $values) . "')";
+        
+        $this->insert[] = $query;
     }
 }

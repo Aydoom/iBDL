@@ -2,7 +2,7 @@
 
 namespace PMMigration\Tables;
 
-class UserTable extends \PMMigration\Core\Table {
+class UserTable extends \PMMigration\Core\DefTable {
 	
     public $name = 'user';
     public $fields = [];

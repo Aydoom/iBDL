@@ -5,6 +5,7 @@ logs($_COOKIE['userid'] . '==>' . $_COOKIE['token']);
 
 $router->access(['PAuth\Core\Auth', 'isLogin'])
     ->any('/', function() {
+        //pr('home/index', false);
         $app = new App();
         $app->run("home", "index");
     })

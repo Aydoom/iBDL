@@ -30,10 +30,19 @@ class DB extends \PDO {
                 || in_array($table->name, $this->exTables)) {
             return false;
         } elseif ($nowCreate) {
-            $this->create($table);
+            if ($this->create($table) && !empty($table->insert)) {
+                $this->fill($table->insert);
+            }
+            
             return true;
         } else {
             $this->tables[$table->name] = $table;
+        }
+    }
+    
+    public function fill($queries) {
+        foreach ($queries as $sql) {
+            $this->query($sql);
         }
     }
     
@@ -54,6 +63,8 @@ class DB extends \PDO {
     {
         if($this->query($table->getQuery())) {
             echo "Table: <b>\"{$table->name}\"</b> is successful created.";
+            
+            return true;
         } else {
             pr("error sql:" . $table->getQuery());
         }

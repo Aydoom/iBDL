@@ -18,7 +18,9 @@ function pr($array, $end = true) {
         }
     }
 
-    echo "<pre>" . print_r($array) . "</pre>";
+    echo "<pre>";
+        print_r($array);
+    echo "</pre>";
     if ($end) {
         die();
     }

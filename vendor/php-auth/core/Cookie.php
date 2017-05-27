@@ -37,7 +37,7 @@ class Cookie {
     }
     
     static function setUserID($id) {
-        if (!setcookie("userId", $id, time()+3600)) {
+        if (!setcookie("userId", $id, time() + 3600 * 140, '/')) {
             logs(__METHOD__ . " [cookie Id not save]");
         }
         
@@ -46,7 +46,7 @@ class Cookie {
     }
 
     static function setUserToken($token) {
-        if (!setcookie("token", $token, time()+3600)) {
+        if (!setcookie("token", $token, time() + 3600 * 140, '/')) {
             logs(__METHOD__ . " [cookie token not save]");
         }
         
@@ -58,7 +58,7 @@ class Cookie {
         $userId = filter_input(INPUT_COOKIE, 'userId', FILTER_SANITIZE_SPECIAL_CHARS);
         $token = filter_input(INPUT_COOKIE, 'token', FILTER_SANITIZE_SPECIAL_CHARS);
         
-        setcookie("userId", $userId, time()+3600, false, false, true);
-        setcookie("token", $token, time()+3600, false, false, true);
+        setcookie("userId", $userId, time() + 3600 * 140, '/');
+        setcookie("token", $token, time() + 3600 * 140, '/');
     }
 }
