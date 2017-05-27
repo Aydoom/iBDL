@@ -1,0 +1,108 @@
+1
+iBDL/app/config/router.php:4
+
+iBDL\Core\Router::access
+iBDL/core/Router.php:47
+
+PAuth\Core\Auth::isLogin
+iBDL/vendor/php-auth/core/Auth.php:31
+
+userID=>30:token=>7ebb4ea3075858abb4dcf5718490a489
+iBDL/vendor/php-auth/core/Auth.php:36
+
+return true
+iBDL/vendor/php-auth/core/Auth.php:50
+
+iBDL\Core\Router::run[/]
+iBDL/core/Router.php:199
+
+self::$exit [false]
+iBDL/core/Router.php:200
+
+$this->access [true]
+iBDL/core/Router.php:201
+
+iBDL\Core\Router::compareRoute[/] <> [user/registrar
+iBDL/core/Router.php:94
+
+iBDL\Core\Router::compareRoutereturn false-1]
+iBDL/core/Router.php:98
+
+iBDL\Core\Router::run[/:controller]
+iBDL/core/Router.php:199
+
+self::$exit [false]
+iBDL/core/Router.php:200
+
+$this->access [true]
+iBDL/core/Router.php:201
+
+iBDL\Core\Router::compareRoute[/:controller] <> [user/registrar
+iBDL/core/Router.php:94
+
+iBDL\Core\Router::compareRoutereturn false-1]
+iBDL/core/Router.php:98
+
+iBDL\Core\Router::run[/:controller/:action]
+iBDL/core/Router.php:199
+
+self::$exit [false]
+iBDL/core/Router.php:200
+
+$this->access [true]
+iBDL/core/Router.php:201
+
+iBDL\Core\Router::compareRoute[/:controller/:action] <> [user/registrar
+iBDL/core/Router.php:94
+
+iBDL\Core\Router::compareRoutereturn true
+iBDL/core/Router.php:114
+
+
+iBDL/core/App.php:50
+
+iBDL\App\Controller\UserController::registrar
+iBDL/app/controller/UserController.php:21
+
+iBDL\Core\Router::run[/:controller/:action/:id]
+iBDL/core/Router.php:199
+
+self::$exit [true]
+iBDL/core/Router.php:200
+
+$this->access [true]
+iBDL/core/Router.php:201
+
+iBDL\Core\Router::run[*]
+iBDL/core/Router.php:199
+
+self::$exit [true]
+iBDL/core/Router.php:200
+
+$this->access [true]
+iBDL/core/Router.php:201
+
+iBDL\Core\Router::start
+iBDL/core/Router.php:84
+
+iBDL\Core\Router::run[/user/:action]
+iBDL/core/Router.php:199
+
+self::$exit [true]
+iBDL/core/Router.php:200
+
+$this->access [true]
+iBDL/core/Router.php:201
+
+iBDL\Core\Router::get
+iBDL/core/Router.php:135
+
+iBDL\Core\Router::run[*]
+iBDL/core/Router.php:199
+
+self::$exit [true]
+iBDL/core/Router.php:200
+
+$this->access [true]
+iBDL/core/Router.php:201
+

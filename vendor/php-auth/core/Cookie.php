@@ -37,20 +37,28 @@ class Cookie {
     }
     
     static function setUserID($id) {
-        setcookie("userId", $id, time()+3600);
+        if (!setcookie("userId", $id, time()+3600)) {
+            logs(__METHOD__ . " [cookie Id not save]");
+        }
+        
+        logs(__METHOD__ . " [id=$id]");
         self::$storage['userId'] = $id;
     }
 
     static function setUserToken($token) {
-        setcookie("token", $token, time()+3600);
+        if (!setcookie("token", $token, time()+3600)) {
+            logs(__METHOD__ . " [cookie token not save]");
+        }
+        
+        logs(__METHOD__ . " [token=$token]");
         self::$storage['token'] = $token;
     }
     
     static function updateTime() {
-        $userId = filter_input($_COOKIE['userId'], FILTER_SANITIZE_SPECIAL_CHARS);
-        $token = filter_input($_COOKIE['token'], FILTER_SANITIZE_SPECIAL_CHARS);
+        $userId = filter_input(INPUT_COOKIE, 'userId', FILTER_SANITIZE_SPECIAL_CHARS);
+        $token = filter_input(INPUT_COOKIE, 'token', FILTER_SANITIZE_SPECIAL_CHARS);
         
-        setcookie("userId", $userID, time()+3600, false, false, true);
+        setcookie("userId", $userId, time()+3600, false, false, true);
         setcookie("token", $token, time()+3600, false, false, true);
     }
 }

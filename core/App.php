@@ -20,7 +20,13 @@ class App {
     public function __construct()
     {
     }
-	
+
+    public function abort($error) {
+        if ($error === 404) {
+            require VIEW . "/errors/404.php";
+        }
+    }
+    
     /**
      * Function get data from controller saves
      * 
@@ -32,7 +38,6 @@ class App {
         return $this->controller->_get($name);
     }
 
-    
     /**
      * function run controller
      * 
@@ -42,12 +47,11 @@ class App {
      */
     public function run($controller, $action, $param = null)
     {
-        $logs();
+        logs();
         $className = 'iBDL\App\Controller\\' . ucfirst($controller) . "Controller";
         $this->controller = new $className($action);
         $this->controller->$action($param);
-        
-        if ($this->controller->redirect) {
+        if (!empty($this->controller->redirect)) {
             $this->redirect($this->controller->redirect);
             die();
         }
@@ -63,8 +67,10 @@ class App {
      */
     public function redirect($uri)
     {
+        //pr($_SERVER);
         $location = 'http://' . $_SERVER['SERVER_NAME']
             . substr($_SERVER['SCRIPT_NAME'], 0 , -9) . ltrim($uri, '/');
+        logs(__METHOD__ . "[$location]");
         header('Location: ' . $location);
     }
 	

@@ -61,7 +61,6 @@ class Router
      * @return $this
      */
     public function any($route, $action) {
-        logs(__METHOD__);
         $this->run($route, $action);
 
         return $this;
@@ -81,18 +80,22 @@ class Router
         return $this;
     }
     
-    public function end() {
+    public function start() {
         logs(__METHOD__);
         $this->access = true;
+        
+        return $this;
     }
     
     /**
      *
     */
     private function compareRoute($route) {
+        logs(__METHOD__ . "[$route] <> [" . implode("/", $this->paths));
         $paths = array_slice(explode("/", $route), 1);
 
         if (count($paths) !== count($this->paths)) {
+            logs(__METHOD__ . 'return false-1]');
             return false;
         }
         
@@ -101,12 +104,14 @@ class Router
                 $name = ltrim($path, ":");
                 $this->args[$name] = $this->paths[$key];
             } elseif ($path != $this->paths[$key]) {
+                logs(__METHOD__ . 'return false-2]');
                 return false;
             } else {
                 //$this->args[] = $this->paths[$key];
             }
         }
         //pr($this->args);
+        logs(__METHOD__ . 'return true');
         return true;
     }
     
@@ -191,7 +196,9 @@ class Router
      * @return $this
      */
     public function run($route, $action) {
-        pr($route, false);
+        logs(__METHOD__ . "[$route]");
+        logs((empty(self::$exit)) ? 'self::$exit [' . 'false]' : 'self::$exit [' . 'true]');
+        logs((empty($this->access)) ? '$this->access [' . 'false]' : '$this->access [' . 'true]');
         if (self::$exit || !$this->access) {
             return $this;
         } elseif (is_callable($action) && 

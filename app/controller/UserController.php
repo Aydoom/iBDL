@@ -32,9 +32,6 @@ class UserController extends Controller {
                 } else {
                     $uri = $preUri;
                 }
-                //pr(Request::get('userForm'), false);
-                //pr($_COOKIE);
-                pr($uri);
                 $this->redirect($uri);
             } else {
                 $error = '<span class="text-danger"> - Error: something wrong</span>';

@@ -32,18 +32,22 @@ class Auth {
         //pr($_COOKIE, false);
         $userID = Cookie::getUserID();
         $token = Cookie::getUserToken();
-
+        
+        logs('userID=>' . $userID . ":" . 'token=>' . $token);
         //pr([$userID, $token], false);
         if (!empty($userID) && !empty($token)) {
             self::$user = DB::getUserByToken($userID, $token);
         } else {
+            logs('return false by empty Cookie');
             return self::falseLogin();
         }
         //pr(self::$user);
         
         if (empty(self::$user)) {
+            logs('return false by empty User');
             return self::falseLogin();
         } else {
+            logs('return true');
             Cookie::updateTime();
             return true;
         }
@@ -54,7 +58,8 @@ class Auth {
      */
     static public function login($userName, $password) {
         self::$user = DB::getUserByPsw($userName, $password);
-        //pr($_COOKIE, false);
+        //pr(self::$user, false);
+        logs(__METHOD__ . "[" . self::$user['id'] . "]");
         Cookie::setUserId(self::$user['id']);
         Cookie::setUserToken(md5(md5(rand(10000, 100000))));
         //pr($_COOKIE, false);

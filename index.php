@@ -1,10 +1,12 @@
 <?php 
-header('Content-Type: text/html; charset=utf8');
+//header('Content-Type: text/html; charset=utf8');
 
 if ($_SERVER['SERVER_NAME'] === "localhost") {
     define ("HOME", "/iBDL");
+    define ("LOGPATH", 3);
 } else {
     define ("HOME", "/Nanolek/ibdl");
+    define ("LOGPATH", 9);
 }
 
 require_once "config/bootstrap.php";
