@@ -13,7 +13,9 @@ class SessionController extends Controller {
 	
 	
 	public function create() {
-		
+            $session = $this->loadModel('session');
+            $error = '';
+            $this->_set('title', 'Создание сессии' . $error);
 	}
 	
 	

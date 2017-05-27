@@ -26,3 +26,12 @@ html, body, .container-fluid, .h100 {
 	background-color: #7e8694;
 	border-left: 2px solid #c77105;
 }
+
+.row-header {
+    border-bottom: 1px solid #ccc;
+    margin: 6rem 15px 3rem;
+}
+
+.table-bordered {
+    margin-top: 2rem;
+}

@@ -53,9 +53,20 @@
                 </ul>
             </div>
             <div class="col-lg-10">
-                <h3><?=$contentTitle?></h3>
-                <hr/>
-                <?=$this->view()?>
+                <div class="row">
+                    <div class="col-lg-9">
+                        <h3><?=$contentTitle?></h3>
+                    </div>
+                    <div class="col-lg-3">
+                        <h4><?=$this->user->getName()?> <small>Log out</small></h4>
+                    </div>
+                    <div class="row row-header"></div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <?=$this->view()?>
+                    </div>
+                </div>                
             </div>
         </div>
     </div>

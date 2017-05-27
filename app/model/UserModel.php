@@ -22,7 +22,7 @@ class UserModel extends Model{
             ['rule' => 'required', 'message' => 'it must be filled'],
             ['rule' => 'textEn', 'message' => 'it must content the only english letters'],
             ['rule' => 'lenght', 'min' => 3, 'max' => 15],
-            //['rule' => 'unique'],
+            ['rule' => 'unique'],
         ],
         'username' => [
             ['rule' => 'required', 'message' => 'it must be filled'],

@@ -12,6 +12,7 @@ class App {
     /* Helpers */
     public $html;
     public $form;
+    public $user;
 
     
     /**
@@ -58,6 +59,7 @@ class App {
         
         $this->html = new \iBDL\Plugins\Helpers\HtmlHelper();
         $this->form = new \iBDL\Plugins\Helpers\FormHelper($this->controller->models);
+        $this->user = new \iBDL\Plugins\Helpers\UserHelper();
 
         require LAYOUT . $this->controller->layout . ".php";
     }

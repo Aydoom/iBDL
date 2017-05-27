@@ -48,12 +48,13 @@ class DB extends \PDO {
     static public function getUserByToken($id, $token) {
         //pr([$id, $token], false);
         $query = self::$db->prepare(
-            'SELECT `user`.*, `user_group`.`type` as `type_group`'
-            . ' FROM `user` LEFT JOIN `user_group`'
-            . ' ON `user`.`id_user_group` = `user_group`.`id`'
-            . ' WHERE `user`.`id` = ?'
-            . ' AND `user`.`token` = ?'
-            . ' LIMIT 1');
+            'SELECT `user`.*, `user_group`.`type` as `type_group`, '
+                . '`user_group`.`level` as `level_group`'
+                . ' FROM `user` LEFT JOIN `user_group`'
+                . ' ON `user`.`id_user_group` = `user_group`.`id`'
+                . ' WHERE `user`.`id` = ?'
+                . ' AND `user`.`token` = ?'
+                . ' LIMIT 1');
         $query->execute([$id, $token]);
         //pr($query);
         $user = $query->fetchAll();
@@ -61,15 +62,16 @@ class DB extends \PDO {
         return $user[0];
     }
     
-    static public function getUserByPsw($user, $password) {
+    static public function getUserByPsw($name, $password) {
         $query = self::$db->prepare(
-            'SELECT `user`.*, `user_group`.`type` as `type_group`'
-            . ' FROM `user` LEFT JOIN `user_group`'
-            . ' ON `user`.`id_user_group` = `user_group`.`id`'
-            . ' WHERE `user`.`name` = ?'
-            . ' AND `user`.`password` = ?'
-            . ' LIMIT 1');
-        $query->execute([$user, md5(md5($password))]);
+            'SELECT `user`.*, `user_group`.`type` as `type_group`, '
+                . '`user_group`.`level` as `level_group`'
+                . ' FROM `user` LEFT JOIN `user_group`'
+                . ' ON `user`.`id_user_group` = `user_group`.`id`'
+                . ' WHERE `user`.`name` = ?'
+                . ' AND `user`.`password` = ?'
+                . ' LIMIT 1');
+        $query->execute([$name, md5(md5($password))]);
         $user = $query->fetchAll();
         
         return $user[0];

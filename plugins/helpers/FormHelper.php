@@ -40,16 +40,16 @@ class FormHelper extends HtmlHelper {
      * @param type $action
      * @return type
      */
-    public function create($name, $action = false) {
+    public function create($name, $action = false, $args = []) {
         $this->setNames($name);
         $this->setAction($action);
         
-        $formArgs = [
+        $formArgs = array_merge([
             'id'    => $this->name,
             'name'  => $this->name,
             'action'=> $this->action,
             'method'=> 'post'
-        ];
+        ], $args);
         
         $this->post = filter_input(INPUT_POST, $formArgs['id'], FILTER_DEFAULT,
         FILTER_REQUIRE_ARRAY);        
@@ -80,6 +80,11 @@ class FormHelper extends HtmlHelper {
         return parent::div($class, $content);
     }
 
+    public function file($name, $attrs = []) {
+        $content = $this->input($name, array_merge($attrs, ['type' => 'file']));
+        
+        return $this->div($name, $content);
+    }
     /**
      * 
      * @param type $name

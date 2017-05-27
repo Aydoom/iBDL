@@ -3,8 +3,10 @@
         <?php
             echo $this->form->create("user"); 
             
-            echo $this->form->text("name", ['label' => 'Login']);
-            echo $this->form->text("username", ['label' => 'Your Name']);
+            echo $this->form->text("name", 
+                    ['label' => 'Login', 'placeholder' => 'Domnin']);
+            echo $this->form->text("username",
+                    ['label' => 'Your Name', 'placeholder' => 'Павел Д.']);
             echo $this->form->password("password", ['label' => 'Password']);
             echo $this->form->password("repeatPassword", ['label' => 'Repeat Password']);
             echo $this->form->text("key", ['label' => 'Invitation key']);
