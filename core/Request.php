@@ -15,7 +15,7 @@ namespace iBDL\Core;
  */
 class Request {
 
-    static private $vars = [];
+    static public $vars = [];
 
     static public function init($array = false) {
         $request = ($array) ? $array : $_REQUEST;
@@ -35,9 +35,17 @@ class Request {
             self::$vars = self::init();
         }
 
-        eval('$value = self::$vars[' . str_replace(".", "][", $name) . '];');
+        eval('$value = self::$vars[' . str_replace(["[]", "."], ["", "]["], $name) . '];');
         
         return $value;
+    }
+    
+    static public function add($array) {
+        if (empty(self::$vars)) {
+            self::$vars = self::init();
+        }
+        //pr(self::$vars);
+        self::$vars = array_merge(self::$vars, self::init($array));
     }
     
     static public function has($name) {

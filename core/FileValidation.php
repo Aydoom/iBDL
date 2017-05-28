@@ -15,10 +15,47 @@ namespace iBDL\Core;
  */
 class FileValidation {
     public $model;
+    public $files;
     
     public function __construct($model) {
         $this->model = $model;
-        pr('ok');
+        $this->files = $_FILES[strtolower($model->modelName) . 'Form'];
     }
     
+    public function fileType($fieldName, $rule) {
+        $error = false;
+        foreach ($this->files['type'][$fieldName] as $type) {
+            if ($type !== $rule['type'] && !empty($type)) {
+                $error = true;
+                break;
+            }
+        }
+        $message = ($rule['message']) ? $rule['message'] :
+                     'Один или несколько файлов с неподдерживаемым расширением';
+        
+        return ($error) ? $message : null;
+    }    
+    
+    public function fileSize($fieldName, $rule) {
+        $error = false;
+        foreach ($this->files['size'][$fieldName] as $size) {
+            if ($size > $rule['size'] && !empty($size)) {
+                $error = true;
+                break;
+            }
+        }
+        $message = ($rule['message']) ? $rule['message'] :
+                     'Один или несколько файлов слишком большие';
+        
+        return ($error) ? $message : null;
+    }    
+    
+    public function fileCount($fieldName, $rule) {
+        $message = ($rule['message']) ? $rule['message'] :
+                    'Одновременно можно загрузить не более ' . $rule['count']
+                    . ' фалов.';
+        
+        return (count($this->files['count'][$fieldName]) > $rule['count'])
+                                                            ? $message : null;
+    }    
 }

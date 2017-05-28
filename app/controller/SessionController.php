@@ -3,6 +3,7 @@
 namespace iBDL\App\Controller;
 
 use iBDL\Core\Controller;
+use iBDL\Core\Request;
 
 class SessionController extends Controller {
 	
@@ -16,9 +17,10 @@ class SessionController extends Controller {
     public function create() {
         $session = $this->loadModel('session');
         $error = '';
-        if ($this->isPut() && $session->validation()) {
-            pr('ok');
+        if ($this->isPut() && $session->validation() && $session->fileValidation()) {
+            pr('yes');
         }
+        
         $this->_set('title', 'Создание сессии' . $error);
     }
 

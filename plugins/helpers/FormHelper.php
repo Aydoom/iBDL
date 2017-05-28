@@ -94,6 +94,7 @@ class FormHelper extends HtmlHelper {
         
         return $this->div($name, $this->input($name, $inputAttrs));
     }
+    
     /**
      * 
      * @param type $name
@@ -135,13 +136,19 @@ class FormHelper extends HtmlHelper {
         
         $id = 'Input' . ucfirst($attrs['type']) . ucfirst($name);
         
+        if (substr_count($name, "[]") === 1) {
+            $clearName = "{$this->name}[" . trim($name, "[]") . "][]";
+        } else {
+            $clearName = "{$this->name}[$name]";
+        }
+        
         $inputAttrs = array_merge([
             'class' => 'form-control',
-            'name'  => "{$this->name}[$name]",
+            'name'  => $clearName,
             'value' => Request::get($this->name . "." . $name),
             'id'    => $id
         ], $attrs);
-            
+
         unset($inputAttrs['label']);
         
         if (isset($this->post[$name])) {
@@ -202,7 +209,7 @@ class FormHelper extends HtmlHelper {
         return $this->tag('input', $defArgs, TAG_CLOSED);
     }
     
-    /**
+     /**
      * 
      * @param type $name
      * @param type $attrs

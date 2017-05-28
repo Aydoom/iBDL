@@ -84,7 +84,7 @@ class HtmlHelper {
     public function getAttrString($attrs) {
         $attrStirng = "";
         foreach($attrs as $name => $val) {
-            if (is_int($name)) {
+            if (is_integer($name)) {
                 $attrStirng.= " $val ";
             } elseif ($val === false) {
                 continue;

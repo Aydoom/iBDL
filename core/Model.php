@@ -81,7 +81,7 @@ class Model {
                                             Request::get($fieldName), $field);
             }
         }
-        $this->hasErrors = !empty($this->validErrors);
+
         return !$this->hasErrors;
     }
     
@@ -96,14 +96,19 @@ class Model {
                 $extRuleName = $names[1];
                 $valid->extention($names[0])->$extRuleName($data, $rule, $field);                
             } elseif (in_array($ruleName, $validRules)) {
-                $errors[] = $valid->$ruleName($data, $rule, $field);
+                $error = $valid->$ruleName($data, $rule, $field);
             } elseif ($this->hasCustomRule($ruleName)) {
-                $errors[] = $this->$ruleName($data, $rule, $field);
+                $error = $this->$ruleName($data, $rule, $field);
             } else {
                 pr("$ruleName in the model \"{$this->modelName}\" not exists");
             }
+            
+            if($error !== Null) {
+                $errors[] = $error;
+                $this->hasErrors = true;
+            }
         }
-        
-        return array_values(array_diff($errors, [null]));
+
+        return $errors;
     }
 }

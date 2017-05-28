@@ -9,6 +9,7 @@
 namespace iBDL\App\Model;
 
 use iBDL\Core\Model;
+use iBDL\Core\FileValidation;
 
 /**
  * Description of SessionModel
@@ -23,10 +24,24 @@ class SessionModel extends Model {
             ['rule' => 'lenght', 'min' => 3, 'max' => 15],
         ],
         'files' => [
-            ['rule' => 'File::Type', 'type' => 'txt'],
-            ['rule' => 'File::Size', 'max' => 1028],
-            ['rule' => 'File::Count', 'max' => 30],
+            ['rule' => 'fileType', 'type' => 'text/plain', 'message' => 'Только [.txt]'],
+            ['rule' => 'fileSize', 'max' => 1028000, 'message' => 'Файл не более 1Мб'],
+            ['rule' => 'fileCount', 'max' => 30],
         ],
-        
     ];
+    
+    public function fileValidation() {
+        $validation = new FileValidation($this);
+        $errors = [];
+        foreach ($this->validRules['files'] as $rule) {
+            $ruleName = $rule['rule'];
+            $errors[] = $validation->$ruleName('files', $rule);
+        }
+        $this->validErrors['filesForm'] = array_values(array_diff($errors, [NULL]));
+        if (!$this->hasErrors && count($this->validErrors['filesForm']) > 0) {
+            $this->hasErrors = true;
+        }
+        
+        return (count($this->validErrors['filesForm']) === 0);
+    }
 }
