@@ -6,35 +6,39 @@ use iBDL\Core\Controller;
 
 class SessionController extends Controller {
 	
-	public function index() {
-		
-	}
-	
-	
-	
-	public function create() {
-            $session = $this->loadModel('session');
-            $error = '';
-            $this->_set('title', 'Создание сессии' . $error);
-	}
-	
-	
-	
-	public function update() {
-		
-	}
-	
-	
-	
-	public function remove() {
-		
-	}
-	
-	
-	
-	public function view() {
-		
-	}
+    public function index() {
+
+    }
+
+    /**
+     * Create Session
+     */
+    public function create() {
+        $session = $this->loadModel('session');
+        $error = '';
+        if ($this->isPut() && $session->validation()) {
+            pr('ok');
+        }
+        $this->_set('title', 'Создание сессии' . $error);
+    }
+
+
+
+    public function update() {
+
+    }
+
+
+
+    public function remove() {
+
+    }
+
+
+
+    public function view() {
+
+    }
 
 	
 }

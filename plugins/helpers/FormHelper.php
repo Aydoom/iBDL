@@ -79,11 +79,20 @@ class FormHelper extends HtmlHelper {
         
         return parent::div($class, $content);
     }
-
+    
+    /**
+     * 
+     * @param type $name
+     * @param type $attrs
+     * @return type
+     */
     public function file($name, $attrs = []) {
-        $content = $this->input($name, array_merge($attrs, ['type' => 'file']));
+        $inputAttrs = array_merge([
+            'class' => false,
+            'type' => 'file',
+        ], $attrs);
         
-        return $this->div($name, $content);
+        return $this->div($name, $this->input($name, $inputAttrs));
     }
     /**
      * 
@@ -132,6 +141,8 @@ class FormHelper extends HtmlHelper {
             'value' => Request::get($this->name . "." . $name),
             'id'    => $id
         ], $attrs);
+            
+        unset($inputAttrs['label']);
         
         if (isset($this->post[$name])) {
             $inputAttrs['value'] = $this->post[$name];

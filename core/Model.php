@@ -68,8 +68,6 @@ class Model {
      * @return type
      */
     public function validation() {
-        $valid = new Validation($this);
-        $validRules = $valid->getListRules();        
         foreach($this->validRules as $field => $rules) {
             $fieldName = $this->getFieldName($field);            
             if (!is_array($rules)) {
@@ -78,29 +76,34 @@ class Model {
             
             if (!Request::has($fieldName)) {
                 continue;
-            }
-            
-            foreach($rules as $rule) {
-                $ruleName = $rule['rule'];
-                if (in_array($ruleName, $validRules)) {
-                    $error = $valid->$ruleName(
-                                        Request::get($fieldName), $rule, $field);
-                } elseif ($this->hasCustomRule($ruleName)) {
-                    $error = $this->$ruleName(
-                                        Request::get($fieldName), $rule, $field);
-                } else {
-                    pr($ruleName . ' in the model "'
-                        . $this->$modelName . '" not exists');
-                }
-                
-                if ($error !== null) {
-                    $this->hasErrors = true;
-                    $this->validErrors[$field][] = $error;                    
-                }
+            } else {
+                $this->validErrors[$field] = $this->validationRun($rules, 
+                                            Request::get($fieldName), $field);
             }
         }
-        
+        $this->hasErrors = !empty($this->validErrors);
         return !$this->hasErrors;
     }
     
+    private function validationRun($rules, $data, $field) {
+        $valid = new Validation($this);
+        $validRules = $valid->getListRules(); 
+        $errors = [];
+        foreach($rules as $rule) {
+            $ruleName = $rule['rule'];
+            if (substr_count($ruleName, "::") === 1) {
+                $names = explode("::", $ruleName);
+                $extRuleName = $names[1];
+                $valid->extention($names[0])->$extRuleName($data, $rule, $field);                
+            } elseif (in_array($ruleName, $validRules)) {
+                $errors[] = $valid->$ruleName($data, $rule, $field);
+            } elseif ($this->hasCustomRule($ruleName)) {
+                $errors[] = $this->$ruleName($data, $rule, $field);
+            } else {
+                pr("$ruleName in the model \"{$this->modelName}\" not exists");
+            }
+        }
+        
+        return array_values(array_diff($errors, [null]));
+    }
 }

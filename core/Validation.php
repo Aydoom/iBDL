@@ -16,11 +16,29 @@ namespace iBDL\Core;
 class Validation {
     
     public $model;
+    public $exten = [];
     
     public function __construct($model) {
         $this->model = $model;
     }
     
+    public function extention($name) {
+        $handName = ucfirst(strtolower($name));
+        if (empty($this->exten[$handName])) {
+            $className = $handName . 'Validation';
+            $this->exten[$handName] = new $className($this->name);
+        }
+        
+        return $this->exten[$handName];
+    }
+    
+    /**
+     * Equal - значение поля равно значению сравнения
+     * 
+     * @param type $data
+     * @param type $rule
+     * @return type
+     */
     public function equal($data, $rule) {
         $message = ($rule['message']) ? $rule['message'] :
                     'it must does match with "' . $rule['field'] . '"';
@@ -30,6 +48,10 @@ class Validation {
         return ($data == Request::get($dataForEqual)) ? null : $message;        
     }
     
+    /**
+     * 
+     * @return type
+     */
     public function getListRules() {
         $methods = get_class_methods($this);
         $ignore = ['__construct'];
@@ -42,6 +64,28 @@ class Validation {
         return $methods;
     }
     
+    /**
+     * Name - значение поля только буквы, числа, точки, запятые и тире
+     * 
+     * @param type $data
+     * @param type $rule
+     * @return type
+     */
+    public function name($data, $rule) {
+        preg_match("/[a-zA-Zа-яА-ЯЁё,.\:\)\(\-\d\s]*/u", $data, $matches);
+        $message = ($rule['message']) ? $rule['message'] :
+                    'Только буквы, цифры и знаки препинания';
+        
+        return ($data !== $matches[0]) ? $message : null;
+    }
+    
+    /**
+     * Numbers - значение поля только цифры
+     * 
+     * @param type $data
+     * @param type $rule
+     * @return type
+     */
     public function numbers($data, $rule) {
         preg_match("/[0-9]*/u", $data, $matches);
         $message = ($rule['message']) ? $rule['message'] :
@@ -68,22 +112,47 @@ class Validation {
         return ($len >= $min && $len <= $max) ? null : $message;
     }
     
+    /**
+     * 
+     * @param type $data
+     * @param type $rule
+     * @return type
+     */
     public function required($data, $rule) {
         return (empty($data)) ? $rule['message'] : null;
     }
     
+    /**
+     * 
+     * @param type $data
+     * @param type $rule
+     * @return type
+     */
     public function text($data, $rule) {
         preg_match("/[a-zA-Zа-яА-ЯЁё,.\s]*/u", $data, $matches);
 
         return ($data !== $matches[0]) ? $rule['message'] : null;
     }
     
+    /**
+     * 
+     * @param type $data
+     * @param type $rule
+     * @return type
+     */
     public function textEn($data, $rule) {
         preg_match("/[a-zA-Z,.\s]*/", $data, $matches);
 
         return ($data !== $matches[0]) ? $rule['message'] : null;
     }
     
+    /**
+     * 
+     * @param type $data
+     * @param type $rule
+     * @param type $field
+     * @return type
+     */
     public function unique($data, $rule, $field) {
         $message = ($rule['message']) ? $rule['message'] :
             'it must be unique';

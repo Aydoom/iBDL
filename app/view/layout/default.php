@@ -37,17 +37,20 @@
             <div class="col-lg-2 col-leftbar">
                 <ul class="nav nav-pills nav-stacked nav-grey">
                     <?php
+                        $r = iBDL\Core\Router::$request;
+                        $cat = implode("/", array_slice(explode("/", $r), 0, 2));
                         foreach ($menuLinks as $href => $text) {
-                            $r = iBDL\Core\Router::$request;
-                            if ($href === $r || $href . "/index" === $r) {
+                            if ($href === $r || $href === $cat) {
                                 $class = ' class="active"';
                                 $contentTitle = $text;
+                                $link = $this->html->block('p', $text);
                             } else {
                                 $class = '';
+                                $link = $this->html->link($text, $href);
                             }
                             
                             echo '<li role="presentation"' . $class . '>' .
-                                $this->html->link($text, $href) . '</li>';
+                                $link . '</li>';
                         }
                     ?>
                 </ul>
@@ -55,10 +58,10 @@
             <div class="col-lg-10">
                 <div class="row">
                     <div class="col-lg-9">
-                        <h3><?=$contentTitle?></h3>
+                        <h3><?=$this->fetch('title')?></h3>
                     </div>
                     <div class="col-lg-3">
-                        <h4><?=$this->user->getName()?> <small>Log out</small></h4>
+                        <h4><?=$this->user->getName()?></h4>
                     </div>
                     <div class="row row-header"></div>
                 </div>

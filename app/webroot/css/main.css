@@ -17,14 +17,22 @@ html, body, .container-fluid, .h100 {
 }
 
 .nav-grey li>a {
-	color: #fff;
-	border-left: 2px solid #99a3b5;
-	border-radius: 0;
+    color: #fff;
+    border-left: 2px solid #99a3b5;
+    border-radius: 0;
 }
 
-.nav-grey li:hover>a, .nav-grey li.active>a, .nav-grey li.active:hover>a {
-	background-color: #7e8694;
-	border-left: 2px solid #c77105;
+.nav-grey li:hover>a {
+    background-color: #7e8694;
+    border-left: 2px solid #7e8694;
+}
+
+.nav-grey li.active>p {
+    position: relative;
+    display: block;
+    padding: 10px 15px;
+    background-color: #7e8694;
+    border-left: 2px solid #c77105;
 }
 
 .row-header {

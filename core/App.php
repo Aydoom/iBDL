@@ -34,8 +34,8 @@ class App {
      * @param type $name
      * @return type
      */
-    public function fetch($name) 
-    {
+    public function fetch($name) {
+        
         return $this->controller->_get($name);
     }
 

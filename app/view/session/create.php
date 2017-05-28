@@ -5,10 +5,11 @@
                     ['enctype' => 'multipart/form-data']); 
             
             echo $this->form->text("name", 
-                    ['label' => 'Login', 'placeholder' => 'Domnin']);
-            echo $this->form->file("files[]", ['label' => 'Файлы данных']);
-          
-            echo $this->form->end("SignUp");
+                    ['label' => 'Имя сессии:', 'placeholder' => 'Климат камера IOQ']);
+            echo $this->form->file("files", 
+                    ['label' => 'Выберитк файлы данных с датчиков:', 'multiple']);
+            echo "<br/><br/>";
+            echo $this->form->end("Создать");
         ?>
     </div>
 </div>

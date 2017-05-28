@@ -15,8 +15,6 @@ class Controller {
     public $name;
     public $action;
 
-
-
     public function __construct($action) {
 
         $this->name = substr(strtolower(array_pop(
@@ -26,15 +24,11 @@ class Controller {
     }
 
     public function _set($name, $value) {
-
         $this->data[$name] = $value;
-
     }
 
     public function _get($name) {
-
         return $this->data[$name];
-
     }
 
 

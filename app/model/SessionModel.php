@@ -16,5 +16,17 @@ use iBDL\Core\Model;
  * @author Aydoom
  */
 class SessionModel extends Model {
-    //put your code here
+    public $validRules = [
+        'name' => [
+            ['rule' => 'required', 'message' => 'it must be filled'],
+            ['rule' => 'name'],
+            ['rule' => 'lenght', 'min' => 3, 'max' => 15],
+        ],
+        'files' => [
+            ['rule' => 'File::Type', 'type' => 'txt'],
+            ['rule' => 'File::Size', 'max' => 1028],
+            ['rule' => 'File::Count', 'max' => 30],
+        ],
+        
+    ];
 }

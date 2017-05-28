@@ -84,7 +84,13 @@ class HtmlHelper {
     public function getAttrString($attrs) {
         $attrStirng = "";
         foreach($attrs as $name => $val) {
-            $attrStirng.= ' ' . $name . '="' . $val . '"'; 
+            if (is_int($name)) {
+                $attrStirng.= " $val ";
+            } elseif ($val === false) {
+                continue;
+            } else {
+                $attrStirng.= ' ' . $name . '="' . $val . '"'; 
+            }
         }
         
         return $attrStirng;
