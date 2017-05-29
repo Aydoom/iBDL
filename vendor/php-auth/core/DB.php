@@ -40,9 +40,8 @@ class DB extends \PDO {
         $query = self::$db->prepare(
             'UPDATE `user` SET `token` = ?'
             . ' WHERE `user`.`id` = ?');
-        $query->execute([Cookie::getUserToken(), $userId]);
         
-        return $query->fetchAll();
+        return $query->execute([Cookie::getUserToken(), $userId]);
     }
     
     static public function getUserByToken($id, $token) {
@@ -72,7 +71,8 @@ class DB extends \PDO {
                 . ' AND `user`.`password` = ?'
                 . ' LIMIT 1');
         $query->execute([$name, md5(md5($password))]);
-        $user = $query->fetchAll();
         
+        $user = $query->fetchAll();
+        //pr([$name, $password, $user]);
         return $user[0];
     }}

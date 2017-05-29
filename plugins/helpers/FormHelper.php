@@ -247,7 +247,7 @@ class FormHelper extends HtmlHelper {
      * @param type $name
      */
     public function setMethod($name) {
-        $this->method = (empty($this->post[$name])) ? "put" : "post";
+        $this->method = (empty($this->post[$name]['id'])) ? "put" : "post";
     }
     
     /**

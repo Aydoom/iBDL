@@ -32,7 +32,7 @@ class Cookie {
             self::$storage['token'] = filter_input(INPUT_COOKIE, 
                                         'token', FILTER_SANITIZE_SPECIAL_CHARS);
         }
-        
+
         return self::$storage['token'];
     }
     

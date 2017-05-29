@@ -3,8 +3,9 @@
         <?php
             echo $this->form->create("user"); 
             
-            echo $this->form->text("login");
-            echo $this->form->password("Password");
+            echo $this->form->text("name", 
+                            ['label' => 'Login', 'placeholder' => 'Domnin']);
+            echo $this->form->password("password", ['label' => 'Password']);
             
             echo $this->form->end("Enter");
         ?>

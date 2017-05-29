@@ -14,6 +14,20 @@ class UserController extends Controller {
     public function login() {
         logs(__METHOD__);
         $this->loadModel('user');
+
+        if ($this->isPut() && Auth::login(Request::get('userForm.name'), 
+                    Request::get('userForm.password'))) {
+                
+            $preUri = Auth::getFalseUrl();
+            if($preUri === "/user/registrar" || $preUri === "/user/login") {
+                $uri = "/";
+            } else {
+                $uri = $preUri;
+            }
+
+            $this->redirect($uri);
+        }
+        
         $this->_set('title', 'Log In');
     }
 	

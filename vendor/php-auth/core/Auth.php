@@ -62,13 +62,16 @@ class Auth {
      */
     static public function login($userName, $password) {
         self::$user = DB::getUserByPsw($userName, $password);
-        //pr(self::$user, false);
+        
+        if (empty(self::$user['id'])) {
+            return false;
+        }
+               
         logs(__METHOD__ . "[" . self::$user['id'] . "]");
         Cookie::setUserId(self::$user['id']);
         Cookie::setUserToken(md5(md5(rand(10000, 100000))));
-        //pr($_COOKIE, false);
-        DB::saveUserToken(self::$user['id']);
-        //pr(self::$user['id']);
+        
+        return DB::saveUserToken(self::$user['id']);
     }
     
     /**
