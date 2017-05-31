@@ -22,6 +22,14 @@ class FileValidation {
         $this->files = $_FILES[strtolower($model->modelName) . 'Form'];
     }
     
+    public function on($nameMethod, $fileName, $rule) {
+        if (empty($this->files)) {
+            return null;
+        } else {
+            return $this->$nameMethod($fileName, $rule);
+        }
+    }
+    
     public function fileType($fieldName, $rule) {
         $error = false;
         foreach ($this->files['type'][$fieldName] as $type) {
@@ -39,7 +47,7 @@ class FileValidation {
     public function fileSize($fieldName, $rule) {
         $error = false;
         foreach ($this->files['size'][$fieldName] as $size) {
-            if ($size > $rule['size'] && !empty($size)) {
+            if ($size > $rule['max'] && !empty($size)) {
                 $error = true;
                 break;
             }

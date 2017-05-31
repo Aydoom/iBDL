@@ -43,3 +43,14 @@ html, body, .container-fluid, .h100 {
 .table-bordered {
     margin-top: 2rem;
 }
+.table-bordered .glyphicon {
+    margin: 0 1rem;
+}
+.table-bordered a {
+    text-decoration: none;
+    color: #000;
+}
+.table-bordered a:hover {
+    color: #c00;
+}
+

@@ -176,6 +176,7 @@ class FormHelper extends HtmlHelper {
                 }
             }
         }
+        //pr([$name, $model->validErrors], false);
 
         if (!empty($model->validErrors[$name])) {
             $text.= $this->block("small", " - " . $model->validErrors[$name][0]);

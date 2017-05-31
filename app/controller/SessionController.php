@@ -4,12 +4,16 @@ namespace iBDL\App\Controller;
 
 use iBDL\Core\Controller;
 use iBDL\Core\Request;
+use PAuth\Core\Auth;
+use iBDL\Core\File;
 
 class SessionController extends Controller {
 	
     public function index() {
-
-    }
+        $session = $this->loadModel('session');
+        $this->_set('sessions', $session->find(
+                                    ['where' => ['id_user' => Auth::$user['id']]]));
+     }
 
     /**
      * Create Session
@@ -18,7 +22,13 @@ class SessionController extends Controller {
         $session = $this->loadModel('session');
         $error = '';
         if ($this->isPut() && $session->validation() && $session->fileValidation()) {
-            pr('yes');
+            if($session->save(Request::get("sessionForm"))) {
+                $file = new File;
+                $file->save();
+                
+                $this->redirect("session/index");
+            }
+            
         }
         
         $this->_set('title', 'Создание сессии' . $error);
@@ -27,7 +37,7 @@ class SessionController extends Controller {
 
 
     public function update() {
-
+        
     }
 
 

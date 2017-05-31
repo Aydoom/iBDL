@@ -22,6 +22,12 @@ class Validation {
         $this->model = $model;
     }
     
+    /**
+     * Extention - для подключения дополнительных классов валидации
+     * 
+     * @param type $name
+     * @return type
+     */
     public function extention($name) {
         $handName = ucfirst(strtolower($name));
         if (empty($this->exten[$handName])) {
@@ -40,12 +46,16 @@ class Validation {
      * @return type
      */
     public function equal($data, $rule) {
-        $message = ($rule['message']) ? $rule['message'] :
-                    'it must does match with "' . $rule['field'] . '"';
-        $dataForEqual = strtolower($this->model->modelName)
-                            . 'Form.' . $rule['field'];
+        if (empty($data)) {
+            return null;
+        } else {
+            $message = ($rule['message']) ? $rule['message'] :
+                        'it must does match with "' . $rule['field'] . '"';
+            $dataForEqual = strtolower($this->model->modelName)
+                                . 'Form.' . $rule['field'];
 
-        return ($data == Request::get($dataForEqual)) ? null : $message;        
+            return ($data == Request::get($dataForEqual)) ? null : $message;
+        }
     }
     
     /**
@@ -72,11 +82,15 @@ class Validation {
      * @return type
      */
     public function name($data, $rule) {
-        preg_match("/[a-zA-Zа-яА-ЯЁё,.\:\)\(\-\d\s]*/u", $data, $matches);
-        $message = ($rule['message']) ? $rule['message'] :
-                    'Только буквы, цифры и знаки препинания';
-        
-        return ($data !== $matches[0]) ? $message : null;
+        if (empty($data)) {
+            return null;
+        } else {
+            preg_match("/[a-zA-Zа-яА-ЯЁё,.\:\)\(\-\d\s]*/u", $data, $matches);
+            $message = ($rule['message']) ? $rule['message'] :
+                        'Только буквы, цифры и знаки препинания';
+
+            return ($data !== $matches[0]) ? $message : null;
+        }
     }
     
     /**
@@ -90,10 +104,19 @@ class Validation {
         preg_match("/[0-9]*/u", $data, $matches);
         $message = ($rule['message']) ? $rule['message'] :
                     'it must be only numbers';
-        
+
         return ($data !== $matches[0]) ? $message : null;
     }
     
+    
+    public function on($nameMethod, $data, $rule, $field) {
+        if (empty($data) && $nameMethod !== 'required') {
+            return null;
+        } else {
+            return $this->$nameMethod($data, $rule, $field);
+        }
+    }
+
     /**
      * 
      * @param type $data
@@ -101,15 +124,19 @@ class Validation {
      * @return type
      */
     public function lenght($data, $rule) {
-        $len = mb_strlen($data);
-        $min = (empty($rule['min'])) ? 3 : $rule['min'];
-        $max = (empty($rule['max'])) ? 10 : $rule['max'];
-        
-        $message = ($rule['message']) ? $rule['message'] :
-                    'length is must be between '
-                    . $min . " - " . $max;
-        
-        return ($len >= $min && $len <= $max) ? null : $message;
+        if (empty($data)) {
+            return null;
+        } else {
+            $len = mb_strlen($data);
+            $min = (empty($rule['min'])) ? 3 : $rule['min'];
+            $max = (empty($rule['max'])) ? 10 : $rule['max'];
+
+            $message = ($rule['message']) ? $rule['message'] :
+                        'length is must be between '
+                        . $min . " - " . $max;
+
+            return ($len >= $min && $len <= $max) ? null : $message;
+        }
     }
     
     /**
@@ -129,9 +156,13 @@ class Validation {
      * @return type
      */
     public function text($data, $rule) {
-        preg_match("/[a-zA-Zа-яА-ЯЁё,.\s]*/u", $data, $matches);
+        if (empty($data)) {
+            return null;
+        } else {
+            preg_match("/[a-zA-Zа-яА-ЯЁё,.\s]*/u", $data, $matches);
 
-        return ($data !== $matches[0]) ? $rule['message'] : null;
+            return ($data !== $matches[0]) ? $rule['message'] : null;
+        }
     }
     
     /**
@@ -141,9 +172,13 @@ class Validation {
      * @return type
      */
     public function textEn($data, $rule) {
-        preg_match("/[a-zA-Z,.\s]*/", $data, $matches);
+        if (empty($data)) {
+            return null;
+        } else {
+            preg_match("/[a-zA-Z,.\s]*/", $data, $matches);
 
-        return ($data !== $matches[0]) ? $rule['message'] : null;
+            return ($data !== $matches[0]) ? $rule['message'] : null;
+        }
     }
     
     /**
@@ -154,12 +189,16 @@ class Validation {
      * @return type
      */
     public function unique($data, $rule, $field) {
-        $message = ($rule['message']) ? $rule['message'] :
-            'it must be unique';
-        $result = $this->model->find([
-            'where' => [$field => $data],
-            'limit' => 1]);
-            
-        return (empty($result)) ? null : $message;
+        if (empty($data)) {
+            return null;
+        } else {
+            $message = ($rule['message']) ? $rule['message'] :
+                'it must be unique';
+            $result = $this->model->find([
+                'where' => [$field => $data],
+                'limit' => 1]);
+
+            return (empty($result)) ? null : $message;
+        }
     }
 }

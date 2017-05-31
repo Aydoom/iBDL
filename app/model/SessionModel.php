@@ -10,6 +10,7 @@ namespace iBDL\App\Model;
 
 use iBDL\Core\Model;
 use iBDL\Core\FileValidation;
+use PAuth\Core\Auth;
 
 /**
  * Description of SessionModel
@@ -35,13 +36,23 @@ class SessionModel extends Model {
         $errors = [];
         foreach ($this->validRules['files'] as $rule) {
             $ruleName = $rule['rule'];
-            $errors[] = $validation->$ruleName('files', $rule);
+            $errors[] = $validation->on($ruleName, 'files', $rule);
         }
-        $this->validErrors['filesForm'] = array_values(array_diff($errors, [NULL]));
-        if (!$this->hasErrors && count($this->validErrors['filesForm']) > 0) {
+        $this->validErrors['files[]'] = array_values(array_diff($errors, [NULL]));
+        if (!$this->hasErrors && count($this->validErrors['files[]']) > 0) {
             $this->hasErrors = true;
         }
-        
-        return (count($this->validErrors['filesForm']) === 0);
+
+        return (count($this->validErrors['files[]']) === 0);
     }
+    
+    public function save($data) {
+        
+        return parent::save([
+            'id_user'       => Auth::$user['id'],
+            'name'          => $data['name'],
+            'registerDate'  => date("Y-m-d H:i:s")
+        ]);
+    }
+
 }

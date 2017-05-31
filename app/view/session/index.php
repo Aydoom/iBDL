@@ -1,3 +1,15 @@
+<?php
+    $sessions = $this->fetch('sessions');
+    
+    $span = function ($uri, $class, $this) {
+      
+        return $this->html->link(
+                '<span class="glyphicon ' . $class . '" aria-hidden="true"></span>',
+                "session/" . $uri
+            );
+    };
+?>
+
 <div class="row">
     <div class="col-lg-2">
         <?=$this->html->link('Создать Сессию', '/session/create',
@@ -12,8 +24,20 @@
                 <th>ID</th>
                 <th>Name</th>
                 <th>Date</th>
-                <th>Actions</th>
+                <th class='text-center'>Actions</th>
             </tr>
+            <?php foreach($sessions as $session) :?>
+            <tr>
+                <td><?=$session['id']?></td>
+                <td><?=$session['name']?></td>
+                <td><?=$session['registerDate']?></td>
+                <td class='text-center'>
+                    <?= $span("update", "glyphicon-pencil", $this)?>
+                    <?= $span("#", "glyphicon-eye-close", $this)?>
+                    <?= $span("delete", "glyphicon-trash", $this)?>
+                </td>
+            </tr>
+            <?php endforeach;?>
         </table>
     </div>
 </div>

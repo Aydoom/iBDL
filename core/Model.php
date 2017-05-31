@@ -39,16 +39,31 @@ class Model {
         return strtolower($this->modelName) . "Form." . $name;
     }
     
+    /**
+     * 
+     * @param type $name
+     * @return type
+     */
     public function hasCustomRule($name) {
         return (in_array($name, get_class_methods($this)));
     }
     
+    /**
+     * 
+     * @param type $conditions
+     * @return type
+     */
     public function find($conditions = []) {
         $db = new DB(config(), strtolower($this->modelName));
         
         return $db->find($conditions);
     }
     
+    /**
+     * 
+     * @param type $modelName
+     * @return type
+     */
     public function loadModel($modelName) {
         $className = 'iBDL\\App\\Model\\' . ucfirst($modelName) . "Model";
         $this->models[$modelName] = new $className();
@@ -56,6 +71,11 @@ class Model {
         return $this->models[$modelName];
     }
     
+    /**
+     * 
+     * @param type $data
+     * @return type
+     */
     public function save($data) {
         $db = new DB(config(), strtolower($this->modelName));
 
@@ -74,12 +94,8 @@ class Model {
                 $rules = [$rules];
             }
             
-            if (!Request::has($fieldName)) {
-                continue;
-            } else {
-                $this->validErrors[$field] = $this->validationRun($rules, 
+            $this->validErrors[$field] = $this->validationRun($rules, 
                                             Request::get($fieldName), $field);
-            }
         }
 
         return !$this->hasErrors;
@@ -96,11 +112,11 @@ class Model {
                 $extRuleName = $names[1];
                 $valid->extention($names[0])->$extRuleName($data, $rule, $field);                
             } elseif (in_array($ruleName, $validRules)) {
-                $error = $valid->$ruleName($data, $rule, $field);
+                $error = $valid->on($ruleName, $data, $rule, $field);
             } elseif ($this->hasCustomRule($ruleName)) {
                 $error = $this->$ruleName($data, $rule, $field);
             } else {
-                pr("$ruleName in the model \"{$this->modelName}\" not exists");
+                //pr("$ruleName in the model \"{$this->modelName}\" not exists");
             }
             
             if($error !== Null) {

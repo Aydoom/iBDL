@@ -29,6 +29,7 @@ class SessionTable extends \PMMigration\Core\DefTable {
         $this->defId("id");
         $this->defId("id_user", false);
         $this->defVarchars(["name"]);
+        $this->addField("access", "tinyint")->def(1);
         $this->addField("trash", "tinyint")->def("NULL");
         $this->defDates(["registerDate", "trashDate"]);
     }

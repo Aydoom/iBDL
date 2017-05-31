@@ -34,9 +34,9 @@ class Request {
         if (empty(self::$vars)) {
             self::$vars = self::init();
         }
-
-        eval('$value = self::$vars[' . str_replace(["[]", "."], ["", "]["], $name) . '];');
         
+        eval('$value = self::$vars[' . str_replace(["[]", "."], ["", "]["], $name) . '];');
+
         return $value;
     }
     
