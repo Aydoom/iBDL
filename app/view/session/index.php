@@ -1,5 +1,6 @@
 <?php
     $sessions = $this->fetch('sessions');
+    $pages = $this->pagination->create('session');
     
     $span = function ($uri, $class, $this) {
       
@@ -39,6 +40,7 @@
             </tr>
             <?php endforeach;?>
         </table>
+        <?=$pages->nav()?>
     </div>
 </div>
 

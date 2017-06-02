@@ -23,6 +23,12 @@ class Model {
     
     public $lastId;
     
+    public $displayPages = 5;
+    public $countPages;
+    public $pages = false;
+    public $activePage = 1;
+
+
     /**
      * 
      */
@@ -56,6 +62,19 @@ class Model {
     public function find($conditions = []) {
         $db = new DB(config(), strtolower($this->modelName));
         
+        if (isset($conditions['page']) && $this->pages) {
+            $page = $conditions['page'];
+            unset($conditions['page']);
+            
+            $this->countPages = $db->find(
+                    array_merge($conditions, ['fields' => 'COUNT(id)']));
+            
+            $this->activePage = $page;
+            $conditions['limit'] = 
+                    ($page - 1) * $this->pages . ', ' . $this->pages;
+            
+        }
+        
         return $db->find($conditions);
     }
     
@@ -81,6 +100,10 @@ class Model {
 
         $this->lastId = $db->insert($data);
         return (!empty($this->lastId));
+    }
+    
+    public function usePagination($countPages = 10) {
+        $this->pages = $countPages;
     }
     
     /**

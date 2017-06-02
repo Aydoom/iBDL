@@ -9,10 +9,15 @@ use iBDL\Core\File;
 
 class SessionController extends Controller {
 	
-    public function index() {
+    public function index($page = 1) {
         $session = $this->loadModel('session');
-        $this->_set('sessions', $session->find(
-                                    ['where' => ['id_user' => Auth::$user['id']]]));
+        $session->usePagination(6);
+        $sessions = $session->find([
+            'where' => ['id_user' => Auth::$user['id']],
+            'page'  => $page
+        ]);
+        $this->_set('sessions', $sessions);
+        $this->_set('model', $session);
      }
 
     /**

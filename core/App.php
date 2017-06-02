@@ -1,6 +1,7 @@
 <?php 
 
 namespace iBDL\Core;
+use iBDL\Plugins\Helpers;
 
 class App {
 	
@@ -57,9 +58,10 @@ class App {
             die();
         }
         
-        $this->html = new \iBDL\Plugins\Helpers\HtmlHelper();
-        $this->form = new \iBDL\Plugins\Helpers\FormHelper($this->controller->models);
-        $this->user = new \iBDL\Plugins\Helpers\UserHelper();
+        $this->html = new Helpers\HtmlHelper();
+        $this->form = new Helpers\FormHelper($this->controller->models);
+        $this->user = new Helpers\UserHelper();
+        $this->pagination = new Helpers\PaginationHelper($this->controller->models);
 
         require LAYOUT . $this->controller->layout . ".php";
     }
