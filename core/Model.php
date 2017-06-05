@@ -65,10 +65,8 @@ class Model {
         if (isset($conditions['page']) && $this->pages) {
             $page = $conditions['page'];
             unset($conditions['page']);
-            
-            $this->countPages = $db->find(
-                    array_merge($conditions, ['fields' => 'COUNT(id)']));
-            
+            $this->displayPages = $this->pages;
+            $this->countPages = ceil($db->count($conditions) / $this->pages);
             $this->activePage = $page;
             $conditions['limit'] = 
                     ($page - 1) * $this->pages . ', ' . $this->pages;

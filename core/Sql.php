@@ -26,6 +26,9 @@ class Sql {
     
     static public function getFields($table, $conditions) {
         if (!empty($conditions['fields'])) {
+            if (!is_array($conditions['fields'])) {
+                $conditions['fields'] = [$conditions['fields']];
+            }
             foreach($conditions['fields'] as &$field) {
                 $field = "`$table`.`$field`";
             }

@@ -39,6 +39,32 @@ class DB extends \PDO{
         }        
     }
     
+    /**
+     * 
+     * @param type $conditions
+     * @return type
+     */
+    public function count($conditions = []) {
+        $sql = 'SELECT COUNT(*) FROM `' . $this->table . '`';
+        $sql.= Sql::getConditions($conditions);
+        
+        $query = $this->prepare($sql);
+        $cond = (empty($conditions['where'])) ? [] : $conditions['where'];
+        $query->execute($cond);
+
+        $output = [];
+        foreach ($query as $row) {
+            $output[] = $row;
+        }
+        
+        return $output[0][0];
+    }
+    
+    /**
+     * 
+     * @param type $conditions
+     * @return type
+     */
     public function find($conditions = []) {
         $query = $this->prepare(Sql::getSelect($this->table, $conditions));
         $cond = (empty($conditions['where'])) ? [] : $conditions['where'];
@@ -52,6 +78,11 @@ class DB extends \PDO{
         return $output;
     }
     
+    /**
+     * 
+     * @param type $data
+     * @return type
+     */
     public function insert($data) {
         $query = $this->prepare("INSERT INTO `" . $this->config['dbname'] . '`.`'
                     . $this->table . "` " . "("

@@ -52,7 +52,12 @@ class App {
         logs();
         $className = 'iBDL\App\Controller\\' . ucfirst($controller) . "Controller";
         $this->controller = new $className($action);
-        $this->controller->$action($param);
+        if(is_null($param)) {
+            $this->controller->$action();
+        } else {
+            $this->controller->$action($param);
+        }
+        
         if (!empty($this->controller->redirect)) {
             $this->redirect($this->controller->redirect);
             die();

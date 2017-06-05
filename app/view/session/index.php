@@ -40,7 +40,11 @@
             </tr>
             <?php endforeach;?>
         </table>
-        <?=$pages->nav()?>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <?=$pages->nav('session')?>
     </div>
 </div>
 
