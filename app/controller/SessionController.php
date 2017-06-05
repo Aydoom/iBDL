@@ -11,7 +11,7 @@ class SessionController extends Controller {
 	
     public function index($page = 1) {
         $session = $this->loadModel('session');
-        $session->usePagination(6);
+        $session->loadBehavior('pagination', ['page' => 2]);
         $sessions = $session->find([
             'where' => ['id_user' => Auth::$user['id']],
             'page'  => $page

@@ -23,10 +23,7 @@ class Model {
     
     public $lastId;
     
-    public $displayPages = 5;
-    public $countPages;
-    public $pages = false;
-    public $activePage = 1;
+    public $behaviors = [];
 
 
     /**
@@ -62,18 +59,17 @@ class Model {
     public function find($conditions = []) {
         $db = new DB(config(), strtolower($this->modelName));
         
-        if (isset($conditions['page']) && $this->pages) {
-            $page = $conditions['page'];
-            unset($conditions['page']);
-            $this->displayPages = $this->pages;
-            $this->countPages = ceil($db->count($conditions) / $this->pages);
-            $this->activePage = $page;
-            $conditions['limit'] = 
-                    ($page - 1) * $this->pages . ', ' . $this->pages;
-            
+        foreach ($this->behaviors as $behavior) {
+            $conditions = $behavior->beforeFind($conditions);
         }
+
+        //pr($this->behaviors);
+        $result = $db->find($conditions);
         
-        return $db->find($conditions);
+        foreach ($this->behaviors as $behavior) {
+            $result = $behavior->afterFind($result);
+        }
+        return $result;
     }
     
     /**
@@ -90,6 +86,20 @@ class Model {
     
     /**
      * 
+     * @param type $behaviorName
+     * @param type $options
+     * @return $this
+     */
+    public function loadBehavior($behaviorName, $options = []) {
+        $name = strtolower($behaviorName);
+        $className = 'iBDL\\Plugins\\Behaviors\\'
+                . ucfirst($name) . "Behavior";
+        $this->behaviors[$name] = new $className($this, $options);
+        
+        return $this;
+    }
+    /**
+     * 
      * @param type $data
      * @return type
      */
@@ -98,10 +108,6 @@ class Model {
 
         $this->lastId = $db->insert($data);
         return (!empty($this->lastId));
-    }
-    
-    public function usePagination($countPages = 10) {
-        $this->pages = $countPages;
     }
     
     /**

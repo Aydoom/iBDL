@@ -87,8 +87,7 @@ class PaginationHelper extends HtmlHelper{
         if (!array_key_exists($lowerName, $this->models)) {
             pr("Error from FormHelper \n the model name \"$name\" not found in controller!");
         } else {
-           564 pr($this->activeModels[$lowerName]);
-            $this->activeModel = $this->activeModels[$lowerName];
+            $this->activeModel = $this->models[$lowerName];
             $this->setParams();
         }
 
@@ -112,8 +111,8 @@ class PaginationHelper extends HtmlHelper{
     }
     
     private function setParams() {
-        $m = $this->activeModel;
-        pr($m);
+        $pageParams = $this->activeModel->behaviors['pagination'];
+        //pr($pageParams);
         $this->page = [
             'left' => floor(($m->displayPages - 1) / 2),
             'right' => ceil(($m->displayPages - 1) / 2),
