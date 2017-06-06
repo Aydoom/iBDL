@@ -51,12 +51,8 @@ class DB extends \PDO{
         $query = $this->prepare($sql);
         $cond = (empty($conditions['where'])) ? [] : $conditions['where'];
         $query->execute($cond);
+        $output = $query->fetchAll();
 
-        $output = [];
-        foreach ($query as $row) {
-            $output[] = $row;
-        }
-        
         return $output[0][0];
     }
     

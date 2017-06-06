@@ -7,6 +7,7 @@
  */
 
 namespace iBDL\Plugins\Helpers;
+use iBDL\Core\App;
 
 /**
  * Description of PaginationHelper
@@ -36,13 +37,12 @@ class PaginationHelper extends HtmlHelper{
      */
     public function items() {
         $html = "";
-        for ($i = $this->page['start']; $i <= $this->page['end']; $i++) {
-            if ($i === $this->page['active']) {
+        for ($i = $this->page->min; $i <= $this->page->max; $i++) {
+            if ($i == $this->page->active) {
                 $html.= $this->block('li', $this->link($i, '#'), 
                                             ['class' => "active"]);
             } else {
-                $html.= $this->block('li', $this->link($i, '#'), 
-                                            ['class' => "active"]);
+                $html.= $this->block('li', $this->link($i, App::$actionUri . $i));
             }
         }
         
@@ -66,9 +66,12 @@ class PaginationHelper extends HtmlHelper{
      * @return type
      */
     public function next($label = "&raquo;") {
-        $link = $this->link($this->block('span', $label), '#', 
-                                            ['aria-label' => "Next"]);
-        if ($this->pages['min'] === 1) {
+        $uri = $this->page->active + 1;
+        $link = $this->link($this->block('span', $label), 
+                    App::$actionUri . $uri, 
+                    ['aria-label' => "Next"]);
+                    
+        if ($this->page->active == $this->page->max) {
             $next = $this->block('li', $link, ['class' => 'disabled']);
         } else {
             $next = $this->block('li', $link);
@@ -88,7 +91,7 @@ class PaginationHelper extends HtmlHelper{
             pr("Error from FormHelper \n the model name \"$name\" not found in controller!");
         } else {
             $this->activeModel = $this->models[$lowerName];
-            $this->setParams();
+            $this->page = $this->activeModel->behaviors['pagination'];
         }
 
     }   
@@ -99,39 +102,30 @@ class PaginationHelper extends HtmlHelper{
      * @return type
      */
     public function prev($label = "&laquo;") {
-        $link = $this->link($this->block('span', $label), '#', 
-                                            ['aria-label' => "Previous"]);
-        if ($this->pages['max'] === $this->page['count']) {
+        $uri = $this->page->active - 1;
+        $link = $this->link($this->block('span', $label),
+                App::$actionUri . $uri, 
+               ['aria-label' => "Previous"]);
+               
+        if ($this->page->min == $this->page->active) {
             $prev = $this->block('li', $link, ['class' => 'disabled']);
         } else {
-            $prev = $this->block('li', $link);
+             $prev = $this->block('li', $link);
         }
         
         return $prev;
     }
-    
-    private function setParams() {
-        $pageParams = $this->activeModel->behaviors['pagination'];
-        //pr($pageParams);
-        $this->page = [
-            'left' => floor(($m->displayPages - 1) / 2),
-            'right' => ceil(($m->displayPages - 1) / 2),
-            'active'=> $m->activePage,
-            'count' => $m->countPages,
-            'freeEnd' => 0,
-            'freeStart' => 0,
-        ];
-        
-        $p = $this->page;
-        $start = $p['active'] - $p['left'];
-        $end = $p['active'] + $p['right'];
-        
-        $startFree = ($start < 1) ? 1 - $start : 0;
-        $endFree = ($end > $p['count']) ? $p['active'] + $p['right'] - $p['count'] : 0;
-        
-        $this->page['max'] = (($end + $startFree) > $p['count']) ? $p['count'] : $end + $startFree;
-        $this->page['min'] = (($start - $endFree) < 1) ? 1 : $start - $endFree; 
-        
-        pr($this->page);
-    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+

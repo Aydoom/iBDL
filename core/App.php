@@ -9,6 +9,8 @@ class App {
     public $action;
     public $param;
     public $view;
+    
+    static public $actionUri;
 
     /* Helpers */
     public $html;
@@ -50,12 +52,13 @@ class App {
     public function run($controller, $action, $param = null)
     {
         logs();
+        self::$actionUri = DS . strtolower($controller) . DS . strtolower($action) . DS;
         $className = 'iBDL\App\Controller\\' . ucfirst($controller) . "Controller";
         $this->controller = new $className($action);
         if(is_null($param)) {
             $this->controller->$action();
         } else {
-            $this->controller->$action($param);
+            $this->controller->$action(...array_values($param));
         }
         
         if (!empty($this->controller->redirect)) {
