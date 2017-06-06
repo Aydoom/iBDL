@@ -14,4 +14,5 @@ function scenarioRun($DB)
     $DB->add(new Table\UserGroupTable());
     $DB->add(new Table\SessionTable());
     $DB->add(new Table\KeyTable());
+    $DB->add(new Table\FileTable());
 }

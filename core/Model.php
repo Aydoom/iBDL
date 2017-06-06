@@ -44,6 +44,13 @@ class Model {
     
     /**
      * 
+     * @return type
+     */
+    public function getLastId() {
+        return $this->lastId;
+    }    
+    /**
+     * 
      * @param type $name
      * @return type
      */

@@ -15,8 +15,33 @@ namespace iBDL\Core;
  */
 class File {
     
+    public $files = [];
+    public $storeDir;
     
-    public function save() {
-        pr('iBDL\Core\File:' . $_FILES);
+    public function __construct($formName, $fieldName) {
+        foreach ($_FILES[$formName] as $key => $files) {
+            foreach($files[$fieldName] as $index => $value) {
+                $this->files[$index][$key] = $value;
+            }
+        }
+    }
+    
+    public function save($storeDir) {
+        $error = false;
+        foreach($this->files as $index => &$file) {
+            $file["new_name"] = $this->getNewName($index);
+            if(is_uploaded_file($file["tmp_name"])) {
+                move_uploaded_file($file["tmp_name"], $storeDir . $file["new_name"]);
+            } else {
+                $file['error'] = 'Не удалось сохранить файл';
+                $error = true;
+            }
+        }
+        
+        return !$error;
+    }
+    
+    public function getNewName($index) {
+        return mktime() . "-" . \PAuth\Core\Auth::$user['id'] . "-" . $index;
     }
 }

@@ -31,6 +31,7 @@ class FileTable extends \PMMigration\Core\DefTable {
         $this->defVarchar("name");
         $this->defVarchar("aliace");
         $this->defDates("loadDate");
+        $this->addField("trash", "tinyint")->def("NULL");
     }
 
 }

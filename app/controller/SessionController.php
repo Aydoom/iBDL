@@ -28,8 +28,11 @@ class SessionController extends Controller {
         $error = '';
         if ($this->isPut() && $session->validation() && $session->fileValidation()) {
             if($session->save(Request::get("sessionForm"))) {
-                $file = new File;
-                $file->save();
+                $files = new File("sessionForm", 'files');
+                if($files->save(FILES)) {
+                    $file = $this->loadModel('file');
+                    $file->save(array_merge($files))
+                }
                 
                 $this->redirect("session/index");
             }

@@ -13,6 +13,7 @@ define("ROOT", realpath(__DIR__ . DS . "..") . DS);
     define("APP", ROOT . "app" . DS);
 		define("CONTROLLERS", APP . "controllers" . DS);
 		define("MODELS", APP . "models" . DS);
+		define("FILES", APP . "files" . DS);
 		define("VIEW", APP . "view" . DS);
 			define("LAYOUT", VIEW . "layout" . DS);
 		define("WEBROOT", HOME . DS . "app" . DS . "webroot" . DS);
