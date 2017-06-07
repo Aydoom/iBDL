@@ -64,13 +64,14 @@ class DB extends \PDO{
     public function find($conditions = []) {
         $query = $this->prepare(Sql::getSelect($this->table, $conditions));
         $cond = (empty($conditions['where'])) ? [] : $conditions['where'];
+        pr($query, false);
         $query->execute($cond);
 
         $output = [];
         foreach ($query as $row) {
             $output[] = $row;
         }
-        
+        pr($output);
         return $output;
     }
     
@@ -92,24 +93,5 @@ class DB extends \PDO{
 
         return $this->lastInsertId();
     }
-    
-    public function getCondition($cond) {
-        $output = [];
-        foreach($cond as $operator => $value) {
-            switch ($operator) {
-                case 'where':
-                    $condition = str_replace(
-                        ['"', '"', "=", ">", "<", ">=", "<=", "!="],
-                        ['', '', "`='", "`>'", "`<'", "`>='", "`<='", "`!='"],
-                        trim($value));
-                    $output[10] = "WHERE `$condition'";
-                    break;
-                case 'limit' :
-                    $output[20] = "LIMIT $value";
-                    break;
-            }
-        }
-        
-        return implode(" ", $output);
-    }
+
 }

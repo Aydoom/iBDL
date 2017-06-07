@@ -28,6 +28,10 @@ class DefTable extends Table{
      * @param type $names
      */
     public function defDates($names) {
+        if(!is_array($names)) {
+            $names = [$names];
+        }
+        
         foreach ($names as $name) {
             $this->defDate($name);
         }

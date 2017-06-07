@@ -14,7 +14,7 @@ class SessionController extends Controller {
         $session->loadBehavior('pagination', ['page' => $page]);
         $sessions = $session->find([
             'where' => ['id_user' => Auth::$user['id']],
-            'page'  => $page
+            'order by' => ['desc' => 'registerDate'],
         ]);
         $this->_set('sessions', $sessions);
         $this->_set('model', $session);
@@ -28,10 +28,11 @@ class SessionController extends Controller {
         $error = '';
         if ($this->isPut() && $session->validation() && $session->fileValidation()) {
             if($session->save(Request::get("sessionForm"))) {
-                $files = new File("sessionForm", 'files');
+                $files = new File();
+                $files->getFromForm("sessionForm", 'files', $session->lastId);
                 if($files->save(FILES)) {
                     $file = $this->loadModel('file');
-                    $file->save(array_merge($files))
+                    $file->save($files->getAll(), $session->lastId);
                 }
                 
                 $this->redirect("session/index");
@@ -56,8 +57,12 @@ class SessionController extends Controller {
 
 
 
-    public function view() {
-
+    public function view($id) {
+        $session = $this->loadModel('session')->belongTo('file');
+        
+        $session->find([
+            'where' => ['id_user' => Auth::$user['id'], 'id' => $id]
+        ]);
     }
 
 	

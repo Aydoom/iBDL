@@ -24,8 +24,20 @@ class Model {
     public $lastId;
     
     public $behaviors = [];
+    
+    public $preConditions = [];
 
 
+    public function belongTo($tableName) {
+        $this->preConditions['left join'] = [
+            'table' => $tableName, 
+            'on' => [
+                "$this->modelName.id" => "$tableName.id_$this->modelName"
+            ]];
+        
+        return $this;
+    }
+    
     /**
      * 
      */
@@ -71,8 +83,8 @@ class Model {
         }
 
         //pr($this->behaviors);
-        $result = $db->find($conditions);
-        
+        $result = $db->find(array_merge($conditions, $this->preConditions));
+
         foreach ($this->behaviors as $behavior) {
             $result = $behavior->afterFind($result);
         }

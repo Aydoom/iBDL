@@ -8,12 +8,26 @@
 
 namespace iBDL\App\Model;
 
+use iBDL\Core\Model;
+
 /**
  * Description of FileModel
  *
  * @author Aydoom
  */
-class FileModel {
+class FileModel extends Model {
     public $validRules = [];
+    
+    
+    public function save($data, $id_session) {
+        
+        foreach($data as $file) {
+            parent::save([
+                'id_session'    => $id_session,
+                'name'          => $file['new_name'],
+                'loadDate'      => date("Y-m-d H:i:s")
+            ]);
+        }
+    }
     
 }

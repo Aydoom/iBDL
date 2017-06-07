@@ -30,7 +30,8 @@
             <?php foreach($sessions as $session) :?>
             <tr>
                 <td><?=$session['id']?></td>
-                <td><?=$session['name']?></td>
+                <td><?=$this->html->link($session['name']
+                        , '/session/view/' . $session['id'])?></td>
                 <td><?=$session['registerDate']?></td>
                 <td class='text-center'>
                     <?= $span("update", "glyphicon-pencil", $this)?>

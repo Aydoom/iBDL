@@ -29,7 +29,7 @@ class FileTable extends \PMMigration\Core\DefTable {
         $this->defId("id");
         $this->defId("id_session", false);
         $this->defVarchar("name");
-        $this->defVarchar("aliace");
+        $this->addField("aliace", "varchar")->len(30)->def("NULL");
         $this->defDates("loadDate");
         $this->addField("trash", "tinyint")->def("NULL");
     }
