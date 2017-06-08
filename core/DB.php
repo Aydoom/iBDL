@@ -64,7 +64,7 @@ class DB extends \PDO{
      */
     public function find($conditions = []) {
         $query = $this->prepare(Sql::getSelect($this->table, $conditions));
-        $cond = (empty($conditions['where'])) ? [] : array_map('trim', ['<>=!'], $conditions['where']);
+        $cond = (empty($conditions['where'])) ? [] : array_map('trim', '<>=!', $conditions['where']);
         pr($query, false);
         pr($cond);
         $query->execute($cond);
