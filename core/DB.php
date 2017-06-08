@@ -55,6 +55,7 @@ class DB extends \PDO{
 
         return $output[0][0];
     }
+
     
     /**
      * 
@@ -64,13 +65,25 @@ class DB extends \PDO{
     public function find($conditions = []) {
         $query = $this->prepare(Sql::getSelect($this->table, $conditions));
         $cond = (empty($conditions['where'])) ? [] : $conditions['where'];
-        pr($query, false);
+        //pr($query, false);
         $query->execute($cond);
+        //pr($query->getColumnMeta(2), false);
+        //pr($query->fetchAll(\PDO::FETCH_NUM));
+        $result = $query->fetchAll(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, 'iBDL\Core\Stmt', [$query]);
+       /* $columns = $this->getColumns($query);
 
         $output = [];
-        foreach ($query as $row) {
-            $output[] = $row;
+        foreach ($result as $numRow => $row) {
+            foreach($row as $numColumn => $value) {
+                $table = $columns[$numColumn]['table'];
+                $name = $columns[$numColumn]['name'];
+                
+                $output[$table][$numRow][$name] = $value;
+            }
         }
+        foreach($output as $table => $rows) {
+            
+        }*/
         pr($output);
         return $output;
     }
