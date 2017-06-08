@@ -60,9 +60,10 @@ class SessionController extends Controller {
     public function view($id) {
         $session = $this->loadModel('session')->belongTo('file');
         
-        $session->find([
-            'where' => ['id_user' => Auth::$user['id'], 'id' => $id]
+        $s = $session->find([
+            'where' => ['id_user' => Auth::$user['id'], 'id' => '<' . $id]
         ]);
+        pr($s);
     }
 
 	
