@@ -73,6 +73,6 @@ class DB extends \PDO {
         $query->execute([$name, md5(md5($password))]);
         
         $user = $query->fetchAll();
-        //pr([$name, $password, $user]);
+        //pr([$name, [$password, md5(md5($password))], $user]);
         return $user[0];
     }}

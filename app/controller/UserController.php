@@ -17,7 +17,7 @@ class UserController extends Controller {
 
         if ($this->isPut() && Auth::login(Request::get('userForm.name'), 
                     Request::get('userForm.password'))) {
-                
+            
             $preUri = Auth::getFalseUrl();
             if($preUri === "/user/registrar" || $preUri === "/user/login") {
                 $uri = "/";

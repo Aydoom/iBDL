@@ -31,6 +31,7 @@ class SessionController extends Controller {
                 $files = new File();
                 $files->getFromForm("sessionForm", 'files', $session->lastId);
                 if($files->save(FILES)) {
+                    $pars = new iBDL\Plugins\Sensor\Parser()
                     $file = $this->loadModel('file');
                     $file->save($files->getAll(), $session->lastId);
                 }
@@ -58,12 +59,13 @@ class SessionController extends Controller {
 
 
     public function view($id) {
-        $session = $this->loadModel('session')->belongTo('file');
+        $model = $this->loadModel('session')->belongTo('file');
         
-        $s = $session->find([
-            'where' => ['id_user' => Auth::$user['id'], 'id' => '<' . $id]
+        $session = $model->find([
+            'where' => ['id_user' => Auth::$user['id'], 'id' => $id]
         ]);
-        pr($s);
+        $this->_set('session', $session[0]);
+        
     }
 
 	

@@ -22,8 +22,7 @@ class DB extends \PDO{
      * Constructor
      * @param type $config
      */
-    public function __construct($config, $table)
-    {
+    public function __construct($config, $table) {
         $this->config = $config;
         $this->table = $table;
         
@@ -64,33 +63,19 @@ class DB extends \PDO{
      */
     public function find($conditions = []) {
         $query = $this->prepare(Sql::getSelect($this->table, $conditions));
-        $cond = (empty($conditions['where'])) ? [] : array_map('trim', '<>=!', $conditions['where']);
-        pr($query, false);
-        pr($cond);
+        $cond = (empty($conditions['where'])) ? [] : array_map(
+                    function ($item) {
+                        return trim($item, "<>=!");   
+                    }, $conditions['where']);
+        
         $query->execute($cond);
-        //pr($query->getColumnMeta(2), false);
-        pr($query->fetchAll(\PDO::FETCH_NUM));
+
         if (isset($conditions['left join'])) {
-            $result = $query->fetchAll(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE,
-                    'iBDL\Core\Stmt', [$query]);
+            $result = Stmt::fetchAll($query);
         } else {
             $result = $query->fetchAll(\PDO::FETCH_ASSOC);
         }
-       /* $columns = $this->getColumns($query);
 
-        $output = [];
-        foreach ($result as $numRow => $row) {
-            foreach($row as $numColumn => $value) {
-                $table = $columns[$numColumn]['table'];
-                $name = $columns[$numColumn]['name'];
-                
-                $output[$table][$numRow][$name] = $value;
-            }
-        }
-        foreach($output as $table => $rows) {
-            
-        }*/
-        //pr($output);
         return $result;
     }
     

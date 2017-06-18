@@ -16,18 +16,19 @@ namespace iBDL\Core;
 class Stmt {
 
     //public $has_join = false;
+    public $tables = [];
     
-    public function __construct($data) {
+    static public function fetchAll($data) {
+        $stmt = new static();
         $rows = $data->fetchAll(\PDO::FETCH_NUM);
-        $columns = $this->getColumns($data);
-        pr($rows);
+        $columns = $stmt->getColumns($data);
         $output = [];
         foreach ($rows as $row) {
             $index = $row[0];
             foreach ($row as $colNum => $value) {
                 $table = $columns[$colNum]['table'];
                 $name = $columns[$colNum]['name'];
-                if ($table == $columns[0]['table']) {
+                if ($stmt->isMainTable($table)) {
                     $output[$index][$name] = $value;
                 } elseif ($name == 'id') {
                     $index2 = $value;
@@ -35,10 +36,10 @@ class Stmt {
                 } else {
                     $output[$index][$table][$index2][$name] = $value;
                 }
-            }            
+            }  
         }
         
-        pr($output);
+        return $stmt->inReadable($output);
     }
     
     public function getColumns($data) {
@@ -50,6 +51,32 @@ class Stmt {
                 'table' => $column['table'],
                 'name' => $column['name']
             ];
+            if ($i == 0) {
+                $this->tables['main'] = $column['table'];
+            } else {
+                $this->tables['slave'][] = $column['table'];
+            }
+        }
+        
+        return $result;
+    }
+    
+    public function isMainTable($tableName) {
+        return ($tableName === $this->tables['main']);
+    }
+    
+    public function isSlaveTable($tableName) {
+        return (in_array($tableName, $this->tables['slave']));
+    }
+    
+    public function inReadable($rows) {
+        $result = array_values($rows);
+        foreach($result as $num => $row) {
+            foreach($row as $colName => $val) {
+                if($this->isSlaveTable($colName)) {
+                    $result[$num][$colName] = array_values(($val));
+                }
+            }
         }
         
         return $result;
